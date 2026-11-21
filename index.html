@@ -285,6 +285,157 @@ body{background:#FBF9FF;color:#221C35;overflow-x:hidden;-webkit-font-smoothing:a
     <input type="text" id="newPortalDesc" placeholder="簡短備註（例：AI 影片生成）" class="w-full px-3 py-2 text-sm border rounded-xl">
     <div class="flex justify-end gap-2 pt-2">
       <button type="button" onclick="closeModal('modalPortal')" class="px-4 py-2 rounded-xl border text-xs font-bold">取消</button>
+      <button type="buMP3 / WAV / M4A，純本機讀取計算秒數，上傳後請在 Gemini 網頁版附上音檔並貼上指令。</p>
+      </div>
+    </div>
+
+    <!-- 黃金前 3 秒 Hook 風格 -->
+    <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-3.5 space-y-2">
+      <label class="block text-xs sm:text-sm font-bold text-wisteria-ink">⚡ 黃金前 3 秒吸睛開場（Hook）風格</label>
+      <div id="hookGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button type="button" onclick="selectHook(this,'❓ 懸念反問型（前3秒拋出勾起好奇心的問題）')" class="hook-btn p-2.5 rounded-xl text-xs font-bold bg-wisteria-primary text-white border border-wisteria-primary text-left">❓ 懸念反問型</button>
+        <button type="button" onclick="selectHook(this,'💖 溫馨金句型（前3秒用直擊人心的暖心金句開場）')" class="hook-btn p-2.5 rounded-xl text-xs font-bold bg-white text-wisteria-ink border border-wisteria-border text-left">💖 溫馨金句型</button>
+        <button type="button" onclick="selectHook(this,'😲 視覺驚喜型（前3秒用奇幻特寫或反轉畫面吸睛）')" class="hook-btn p-2.5 rounded-xl text-xs font-bold bg-white text-wisteria-ink border border-wisteria-border text-left">😲 視覺驚喜型</button>
+        <button type="button" onclick="selectHook(this,'🎯 痛點秘訣型（前3秒直接點破日常困擾與妙招）')" class="hook-btn p-2.5 rounded-xl text-xs font-bold bg-white text-wisteria-ink border border-wisteria-border text-left">🎯 痛點秘訣型</button>
+      </div>
+    </div>
+
+    <!-- 影片總長、比例與畫風 -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div>
+        <label class="block text-xs font-bold mb-1">⏱️ 影片總長（每10秒一幕）</label>
+        <select id="selDuration" class="w-full px-3 py-2.5 text-sm bg-wisteria-bg border border-wisteria-border rounded-xl font-bold">
+          <option value="20">20 秒（2 幕）</option>
+          <option value="30" selected>30 秒（3 幕短影音）</option>
+          <option value="40">40 秒（4 幕起承轉合）</option>
+          <option value="60">60 秒（6 幕完整短劇）</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1">📐 畫面比例</label>
+        <select id="selRatio" class="w-full px-3 py-2.5 text-sm bg-wisteria-bg border border-wisteria-border rounded-xl font-bold">
+          <option value="9:16" selected>9:16 直式（Shorts / Reels）</option>
+          <option value="16:9">16:9 橫式寬螢幕</option>
+          <option value="1:1">1:1 方形貼文</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1">🎨 視覺畫風</label>
+        <select id="selStyle" class="w-full px-3 py-2.5 text-sm bg-wisteria-bg border border-wisteria-border rounded-xl font-bold">
+          <option value="Pixar 3D animation style, warm cinematic lighting, expressive characters, 8k">皮克斯 3D 動畫風格</option>
+          <option value="1960s Taiwanese nostalgic watercolor illustration, warm golden hour sunlight">台灣懷舊水彩插畫風</option>
+          <option value="Studio Ghibli inspired healing Japanese hand-drawn anime style, soft sunlight">日系吉卜力療癒手繪</option>
+          <option value="Cozy handcrafted stop-motion claymation style, soft tactile textures">療癒手作黏土定格風</option>
+          <option value="Cinematic photorealistic 35mm film photography, shallow depth of field">電影級寫實光影</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 多人角色卡庫 -->
+    <div class="bg-wisteria-soft/60 border border-wisteria-border rounded-2xl p-3.5 space-y-2.5">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-xs sm:text-sm font-bold text-wisteria-primary">🎭 多人角色卡庫（點選本集出場角色，鎖定外觀＋英文聲線）</span>
+        <button type="button" onclick="openModal('modalChar')" class="px-2.5 py-1.5 rounded-xl bg-wisteria-primary text-white text-xs font-bold shrink-0">➕ 新增角色</button>
+      </div>
+      <div id="castGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
+    </div>
+
+    <!-- STEP 1 行動按鈕 -->
+    <div class="pt-2 space-y-2">
+      <button type="button" onclick="copyPromptStep1AndOpenGemini()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#5B3E96] to-[#7C5AC2] hover:from-[#472E7A] hover:to-[#5B3E96] text-white font-bold text-sm sm:text-base shadow-md transition">
+        📋 一鍵複製「3版故事指令」並開啟 Gemini 網頁版 ↗
+      </button>
+      <div class="text-center">
+        <button type="button" onclick="switchStep(2)" class="text-xs font-bold text-wisteria-primary underline">已有 Gemini 回覆？直接前往 STEP 2 貼上故事 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STEP 2：故事微調 ==================== -->
+<section id="step2View" class="hidden space-y-4">
+  <div class="bg-white border border-wisteria-border rounded-3xl p-4 sm:p-6 shadow-sm space-y-4">
+    <div>
+      <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-wisteria-primary text-xs font-bold">STEP 02 · 挑選版本、微調劇情並生成 10 秒分鏡指令</span>
+      <h2 class="text-lg sm:text-xl font-bold mt-1">貼回 Gemini 產出的故事並微調</h2>
+    </div>
+
+    <div class="space-y-2">
+      <textarea id="pasteStoriesRaw" rows="4" placeholder="請在此長按「貼上」Gemini 網頁版回覆的 3 版故事內容..." class="w-full px-3.5 py-2.5 text-sm bg-wisteria-bg border border-wisteria-border rounded-xl focus:outline-none focus:border-wisteria-primary"></textarea>
+      <button type="button" onclick="parseStoriesFromRaw()" class="w-full py-2.5 rounded-xl bg-wisteria-soft hover:bg-purple-100 text-wisteria-primary border border-purple-200 font-bold text-sm">✨ 自動解析 3 版故事卡片</button>
+    </div>
+
+    <!-- 3 版故事選擇卡片 -->
+    <div id="storyCardsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+
+    <!-- 最終故事微調框 -->
+    <div class="space-y-2 pt-2 border-t border-wisteria-border">
+      <label class="block text-xs font-bold text-wisteria-primary">✍️ 確定版故事內容（可直接修改台詞或情節）</label>
+      <textarea id="finalStoryEditor" rows="5" placeholder="點選上方卡片或直接在此輸入最終故事..." class="w-full px-3.5 py-2.5 text-sm bg-white border-2 border-purple-200 rounded-xl focus:outline-none focus:border-wisteria-primary"></textarea>
+    </div>
+
+    <div class="space-y-2">
+      <button type="button" onclick="copyPromptStep2AndOpenGemini()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#5B3E96] to-[#7C5AC2] text-white font-bold text-sm sm:text-base shadow-md transition">
+        📋 一鍵複製「10秒分鏡指令」並開啟 Gemini 網頁版 ↗
+      </button>
+      <div class="flex justify-between text-xs font-bold">
+        <button type="button" onclick="switchStep(1)" class="text-wisteria-muted">← 返回 STEP 1</button>
+        <button type="button" onclick="switchStep(3)" class="text-wisteria-primary underline">已拿到分鏡回覆？前往 STEP 3 →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STEP 3：10秒分鏡與匯出 ==================== -->
+<section id="step3View" class="hidden space-y-4">
+  <div class="bg-white border border-wisteria-border rounded-3xl p-4 sm:p-6 shadow-sm space-y-4">
+    <div>
+      <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-wisteria-primary text-xs font-bold">STEP 03 · 首尾幀連貫分鏡、Google Flow 生片與 SRT 匯出</span>
+      <h2 class="text-lg sm:text-xl font-bold mt-1">貼回 10 秒分鏡與社群發佈文案</h2>
+    </div>
+
+    <div class="space-y-2">
+      <textarea id="pasteStoryboardRaw" rows="4" placeholder="請在此長按「貼上」Gemini 回覆的 10 秒分鏡與社群文案..." class="w-full px-3.5 py-2.5 text-sm bg-wisteria-bg border border-wisteria-border rounded-xl focus:outline-none focus:border-wisteria-primary"></textarea>
+      <button type="button" onclick="parseStoryboardFromRaw()" class="w-full py-2.5 rounded-xl bg-wisteria-primary text-white font-bold text-sm shadow-2xs">🎬 自動解析分鏡卡片與社群發佈包</button>
+    </div>
+
+    <!-- 分鏡卡片列表 -->
+    <div id="scenesContainer" class="space-y-4"></div>
+
+    <!-- 多平台社群發佈文案與 Hashtag 自動包 -->
+    <div id="socialPackBox" class="bg-gradient-to-r from-purple-50 to-amber-50 border border-purple-200 rounded-2xl p-4 space-y-2.5">
+      <div class="flex items-center justify-between gap-2">
+        <span class="text-xs sm:text-sm font-bold text-wisteria-primary">📱 多平台發佈文案與 Hashtag 自動包（Shorts / Reels / FB）</span>
+        <button type="button" onclick="copySocialPack()" class="px-3 py-1.5 rounded-xl bg-wisteria-primary text-white text-xs font-bold shrink-0">📋 一鍵複製文案包</button>
+      </div>
+      <textarea id="socialPackText" rows="4" placeholder="解析後自動填入爆款標題、影片簡介與精準 Hashtag..." class="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-purple-200 rounded-xl"></textarea>
+    </div>
+
+    <!-- 匯出與存檔按鈕列 -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+      <button type="button" onclick="downloadSrtFile()" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm">🎬 下載剪映字幕檔 (.srt)</button>
+      <button type="button" onclick="downloadTxtFile()" class="py-3 px-4 rounded-2xl bg-wisteria-primary hover:bg-wisteria-hover text-white font-bold text-xs sm:text-sm shadow-sm">📥 下載完整腳本 (.txt)</button>
+      <button type="button" onclick="saveCurrentProjectToHistory()" class="py-3 px-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm shadow-sm">💾 儲存至本機歷史專案</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- 提示 Toast -->
+<div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-wisteria-ink text-white px-4 py-2.5 rounded-full text-xs font-bold shadow-lg opacity-0 pointer-events-none transition-opacity duration-200 z-50 whitespace-nowrap"></div>
+
+</div><!-- end appWrapper -->
+
+<!-- Modal：新增常用網站 -->
+<div id="modalPortal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-3">
+    <h3 class="text-base font-bold text-wisteria-primary">➕ 新增常用影片網站</h3>
+    <input type="text" id="newPortalName" placeholder="網站名稱（例：Runway Gen-3）" class="w-full px-3 py-2 text-sm border rounded-xl">
+    <input type="url" id="newPortalUrl" placeholder="網址（例：https://runwayml.com）" class="w-full px-3 py-2 text-sm border rounded-xl">
+    <input type="text" id="newPortalDesc" placeholder="簡短備註（例：AI 影片生成）" class="w-full px-3 py-2 text-sm border rounded-xl">
+    <div class="flex justify-end gap-2 pt-2">
+      <button type="button" onclick="closeModal('modalPortal')" class="px-4 py-2 rounded-xl border text-xs font-bold">取消</button>
       <button 與 AI 創作網站快速傳送門（首推 Google Flow）-->
                 <!-- ============================================================= -->
                 <div id="videoPortalDrawer" class="hidden pt-2.5 border-t border-wisteria-border/80 space-y-2.5">
