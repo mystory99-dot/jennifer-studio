@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>珍妮花工作室 JENNIFER STUDIO · 以圖生故事＋首幀生圖＋圖生影全能旗艦站</title>
+<meta name="description" content="珍妮花工作室 JENNIFER STUDIO · 100% 零 API Key 短影音旗艦創作站：上傳圖片自動生故事、中文劇情自動連動英文提示詞、每幕雙提示詞（首幀圖片 + 圖生影片）、每日不重複故事靈感與剪映 SRT 匯出">
+<meta name="theme-color" content="#5B3E96">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="珍妮花工作室">
+<meta property="og:title" content="珍妮花工作室 JENNIFER STUDIO">
+<meta property="og:description" content="100% 零 API Key 短影音旗艦創作站：提供一張圖片自動生成故事與10秒分鏡、中文劇情連動英文提示詞、先出首幀圖再圖生影雙 엔진">
+<link id="pwaIconLink" rel="icon" type="image/svg+xml" href="">
+<link id="appleIconLink" rel="apple-touch-icon" href="">
+<link id="manifestLink" rel="manifest" href="">
+<style>
+:root{--bg:#FBF9FF;--card:#FFFFFF;--soft:#F3EEFF;--border:#E5DDF5;--pri:#5B3E96;--pri-h:#472E7A;--acc:#7C5AC2;--ink:#221C35;--mut:#696080;--gold:#D97706;--ok:#059669;--blue:#2563EB}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;overflow-x:hidden}
+#wrap{transform-origin:top left;transition:width .2s,transform .2s;min-height:100vh;display:flex;flex-direction:column}
+.container{max-width:980px;width:100%;margin:0 auto;padding:0 12px}
+.hidden{display:none!important}
+button,select,input,textarea{font-family:inherit}
+button{cursor:pointer;border:none;transition:all .15s}
+button:active{transform:scale(.98)}
+.line-bar{background:linear-gradient(90deg,#472E7A,#5B3E96,#7C5AC2);color:#fff;padding:10px 14px;font-size:12px}
+.line-bar .in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.hdr{background:rgba(255,255,255,.96);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:30;padding:10px 0}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-ico{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#5B3E96,#7C5AC2,#D97706);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 10px rgba(91,62,150,.25)}
+.logo-t{font-size:19px;font-weight:900;color:var(--pri);line-height:1.1}
+.logo-s{font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--mut);margin-top:2px}
+.badge-free{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;white-space:nowrap}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+@media(min-width:640px){.sm-grid3{grid-template-columns:repeat(3,1fr)}.sm-grid4{grid-template-columns:repeat(4,1fr)}}
+.ctrl-btn{padding:8px 6px;border-radius:12px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:4px;background:var(--soft);color:var(--pri);border:1px solid var(--border)}
+.ctrl-btn.gold{background:linear-gradient(90deg,#FFFBEB,#F3EEFF);border-color:#FCD34D}
+.ctrl-btn.wht{background:#fff}
+.drawer{margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(34,28,53,.03)}
+.sec-tag{display:inline-block;padding:3px 10px;border-radius:99px;background:#EDE9FE;color:var(--pri);font-size:11px;font-weight:800;margin-bottom:4px}
+.sec-h{font-size:17px;font-weight:800;margin-bottom:12px}
+.mode-bar{background:var(--soft);padding:5px;border-radius:14px;border:1px solid var(--border);margin-bottom:12px}
+.mode-btn{padding:9px 4px;border-radius:10px;font-size:11.5px;font-weight:800;background:transparent;color:var(--mut)}
+.mode-btn.act{background:#fff;color:var(--pri);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.mode-btn.rnd{background:linear-gradient(90deg,#FEF3C7,#EDE9FE);color:#78350F;border:1px solid #FCD34D}
+.mode-btn.imgm{background:linear-gradient(90deg,#DBEAFE,#EDE9FE);color:#1E40AF;border:1px solid #93C5FD}
+.inp{width:100%;padding:10px 12px;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--ink);margin-bottom:10px}
+.inp:focus{outline:none;border-color:var(--pri);background:#fff}
+.lbl{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:var(--ink)}
+.hook-btn{padding:9px 10px;border-radius:12px;font-size:12px;font-weight:700;background:#fff;border:1px solid var(--border);color:var(--ink);text-align:left}
+.hook-btn.act{background:var(--pri);color:#fff;border-color:var(--pri)}
+.dur-pill{padding:7px 4px;border-radius:10px;font-size:11px;font-weight:800;background:#fff;border:1px solid var(--border);color:var(--ink);text-align:center}
+.dur-pill.act{background:var(--pri);color:#fff;border-color:var(--pri)}
+.cast-box{background:var(--soft);border:1px solid var(--border);border-radius:16px;padding:12px;margin:12px 0}
+.cast-item{background:#fff;border:2px solid var(--border);border-radius:14px;padding:10px;cursor:pointer;transition:all .15s}
+.cast-item.act{border-color:var(--pri);background:#F3EEFF;box-shadow:0 3px 10px rgba(91,62,150,.12)}
+.voice-slot{background:#fff;border:1px solid #DDD6FE;border-radius:12px;padding:10px;margin-bottom:8px}
+.btn-main{width:100%;padding:14px;border-radius:16px;background:linear-gradient(90deg,#5B3E96,#7C5AC2);color:#fff;font-size:14px;font-weight:800;box-shadow:0 6px 16px -4px rgba(91,62,150,.35);margin-top:6px}
+.btn-direct{width:100%;padding:15px 14px;border-radius:16px;background:linear-gradient(90deg,#D97706,#EA580C);color:#fff;font-size:15px;font-weight:900;box-shadow:0 6px 18px -4px rgba(217,119,6,.45);margin:6px 0 12px}
+.btn-google{width:100%;padding:11px;border-radius:12px;background:linear-gradient(90deg,#2563EB,#4F46E5);color:#fff;font-size:13px;font-weight:800;margin-bottom:8px}
+.btn-sub{padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;background:var(--pri);color:#fff}
+.btn-out{padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;background:#fff;color:var(--pri);border:1px solid var(--border)}
+.scene{background:var(--bg);border:2px solid var(--border);border-radius:18px;padding:13px;margin-bottom:14px;transition:all .2s}
+.scene.done{border-color:#10B981;background:#ECFDF5}
+.scene-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px}
+.pill{padding:4px 10px;border-radius:99px;background:var(--pri);color:#fff;font-size:11px;font-weight:800}
+.scene.done .pill{background:#059669}
+.img-btn{padding:7px 11px;border-radius:10px;background:linear-gradient(90deg,#2563EB,#4F46E5);color:#fff;font-size:11px;font-weight:800}
+.flow-btn{padding:7px 11px;border-radius:10px;background:linear-gradient(90deg,#D97706,#EA580C);color:#fff;font-size:11px;font-weight:800}
+.pack-btn{padding:7px 10px;border-radius:10px;background:#EDE9FE;color:var(--pri);font-size:11px;font-weight:800;border:1px solid #C4B5FD}
+.done-btn{padding:6px 10px;border-radius:10px;background:#fff;color:var(--mut);font-size:11px;font-weight:800;border:1px solid var(--border)}
+.scene.done .done-btn{background:#059669;color:#fff;border-color:#059669}
+.step1-img-box{background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:12px;padding:9px;margin:8px 0}
+.step2-vid-box{background:#F5F3FF;border:1.5px solid #C4B5FD;border-radius:12px;padding:9px;margin:8px 0}
+.link-box{background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:8px;margin:8px 0}
+.sfx-box{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:8px;margin-bottom:8px}
+.edit-inp{width:100%;padding:7px 10px;font-size:12px;background:#fff;border:1px solid #D1D5DB;border-radius:8px;color:var(--ink);margin-top:3px}
+.edit-inp:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 2px rgba(91,62,150,.15)}
+.edit-area{width:100%;padding:8px 10px;font-size:12.5px;line-height:1.5;background:#fff;border:1px solid #D1D5DB;border-radius:10px;color:var(--ink);margin-top:3px;resize:vertical;overflow-y:auto;display:block}
+.edit-area:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 2px rgba(91,62,150,.15)}
+.daily-banner{background:linear-gradient(90deg,#FEF3C7,#F3EEFF);border:1px solid #FCD34D;border-radius:14px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.wf-bar{background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:10px;margin-bottom:12px}
+.wf-btn{padding:8px 6px;border-radius:10px;font-size:11px;font-weight:800;background:#fff;border:1.5px solid var(--border);color:var(--ink);text-align:center}
+.wf-btn.act{background:var(--pri);color:#fff;border-color:var(--pri)}
+.img-drop{border:2px dashed #60A5FA;background:#EFF6FF;border-radius:16px;padding:14px;margin-bottom:8px}
+.img-prev-wrap{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #BFDBFE;border-radius:12px;padding:10px;margin-top:8px;flex-wrap:wrap}
+.img-prev-thumb{width:92px;height:122px;object-fit:cover;border-radius:10px;border:2px solid #3B82F6;flex-shrink:0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-card{background:#fff;border-radius:22px;max-width:440px;width:100%;padding:18px;max-height:85vh;overflow-y:auto}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:12px;font-weight:700;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="wrap">
+
+<!-- LINE 內建瀏覽器偵測防呆橫幅 -->
+<div id="lineBar" class="line-bar hidden">
+  <div class="container in">
+    <div>⚠️ <strong>偵測到 LINE 內建瀏覽器</strong>：請點右上角 <strong>⋮</strong> 選「以預設瀏覽器開啟（Chrome）」以確保下載順暢。</div>
+    <button type="button" id="btnLineCopy" class="btn-out" style="background:#FCD34D;color:#3B0764;border:none">📋 複製外部開啟連結</button>
+  </div>
+</div>
+
+<!-- 頂部品牌列與第二行控制按鈕 -->
+<header class="hdr">
+  <div class="container">
+    <div class="hdr-top">
+      <div class="logo">
+        <div class="logo-ico">🎬</div>
+        <div>
+          <div class="logo-t">珍妮花工作室</div>
+          <div class="logo-s">JENNIFER STUDIO · 以圖生故事＋首幀雙引擎</div>
+        </div>
+      </div>
+      <span class="badge-free">100% 零 API Key 本機版</span>
+    </div>
+
+    <div class="grid3">
+      <button type="button" id="btnLayout" class="ctrl-btn wht">🖥️ 切換電腦版</button>
+      <button type="button" id="btnPortal" class="ctrl-btn gold">🌐 常用影片網站 ▼</button>
+      <button type="button" id="btnTool" class="ctrl-btn">⚙️ 工具箱 (<span id="histCount">0</span>) ▼</button>
+    </div>
+
+    <!-- 常用影片網站抽屜 -->
+    <div id="portalDrawer" class="drawer hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:800;color:var(--pri)">🚀 一鍵直達生圖與做影片網站（首推 Google Flow）</span>
+        <button type="button" id="btnOpenAddPortal" class="btn-sub" style="padding:5px 10px;font-size:11px">➕ 新增網站</button>
+      </div>
+      <div id="portalGrid" class="grid2 sm-grid4"></div>
+    </div>
+
+    <!-- 工具箱抽屜 -->
+    <div id="toolDrawer" class="drawer hidden">
+      <div class="grid2 sm-grid4">
+        <button type="button" id="btnDemo" class="ctrl-btn gold">⚡ 載入今日新靈感</button>
+        <button type="button" id="btnOpenHist" class="ctrl-btn">📂 本機歷史專案</button>
+        <button type="button" id="btnCopyExt" class="ctrl-btn wht">🔗 複製外部開啟連結</button>
+        <button type="button" id="btnPwaInfo" class="ctrl-btn wht">📲 安裝桌面 App 教學</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 主工作區 -->
+<main class="container" style="flex:1;padding-top:12px;padding-bottom:28px">
+
+  <section id="sec1" class="card">
+    <!-- 每日自動推陳出新＋重開分頁自動輪替不重複提示橫幅 -->
+    <div class="daily-banner">
+      <div>
+        <div style="font-size:12px;font-weight:900;color:#92400E">✨ 今日自動推陳出新靈感（重開分頁自動更新・絕不重複前次故事）</div>
+        <div id="dailyFreshLabel" style="font-size:12px;color:var(--ink);margin-top:2px"></div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span id="poolRemainBadge" style="font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;background:#fff;color:var(--pri);border:1px solid #FCD34D"></span>
+        <button type="button" id="btnRefreshFresh" class="btn-sub" style="padding:6px 10px;font-size:11px;background:#D97706">🔄 立即換新題</button>
+      </div>
+    </div>
+
+    <span class="sec-tag">STEP 01 · 先訂秒數 → 四大輸入源（含圖片自動生故事） → 一鍵直出分鏡</span>
+    <h2 class="sec-h">設定影片規格與登場角色卡</h2>
+
+    <!-- 1. 先訂影片總秒數 -->
+    <div style="background:var(--soft);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:800;color:var(--pri)">⏱️ 第一步：先訂影片總時長（每 10 秒一幕）</span>
+        <span id="sceneCountBadge" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--pri);color:#fff">共 3 幕（30 秒）</span>
+      </div>
+      <div class="grid3 sm-grid4" style="margin-bottom:4px">
+        <button type="button" class="dur-pill" data-sec="10">10秒 (1幕)</button>
+        <button type="button" class="dur-pill" data-sec="20">20秒 (2幕)</button>
+        <button type="button" class="dur-pill act" data-sec="30">30秒 (3幕)</button>
+        <button type="button" class="dur-pill" data-sec="40">40秒 (4幕)</button>
+        <button type="button" class="dur-pill" data-sec="60">1分鐘 (6幕)</button>
+        <button type="button" class="dur-pill" data-sec="90">1分半 (9幕)</button>
+        <button type="button" class="dur-pill" data-sec="120">2分鐘 (12幕)</button>
+        <div style="display:flex;align-items:center;gap:4px">
+          <input type="number" id="inpSec" min="10" max="300" step="10" value="30" class="inp" style="margin-bottom:0;padding:6px 8px;font-size:12px;font-weight:800;text-align:center" title="自訂秒數">
+          <span style="font-size:11px;font-weight:800;color:var(--mut);white-space:nowrap">秒</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 出片工作流選擇（預設：先生首幀圖片 → 再圖生影片） -->
+    <div class="wf-bar">
+      <div style="font-size:12px;font-weight:800;color:var(--pri);margin-bottom:6px">🎬 選擇影片製作流程（最順暢推薦：先生出首幀圖片，再進行影片製作）：</div>
+      <div class="grid2">
+        <button type="button" id="wfImg2Vid" class="wf-btn act">🖼️➡️🎥 先生首幀圖片 → 再圖生影片（畫風最穩）</button>
+        <button type="button" id="wfTxt2Vid" class="wf-btn">⚡ 直接純文字生影片（單步驟快出）</button>
+      </div>
+    </div>
+
+    <!-- 2. 四大輸入方式切換（新增：🖼️ 圖片生故事） -->
+    <div class="mode-bar grid4">
+      <button type="button" id="modeText" class="mode-btn act">✍️ 主題大綱</button>
+      <button type="button" id="modeImage" class="mode-btn imgm">🖼️ 圖片生故事</button>
+      <button type="button" id="modeAudio" class="mode-btn">🎵 本機音檔</button>
+      <button type="button" id="modeRandom" class="mode-btn rnd">🎲 隨機/搜尋</button>
+    </div>
+
+    <!-- 輸入源 A：主題 / 大綱 -->
+    <div id="textBox">
+      <label class="lbl">📌 影片主題名稱（已自動帶入今日最新不重複主題，也可自行修改）</label>
+      <input type="text" id="inpTitle" class="inp" placeholder="例：小女孩與狗、柑仔店裡的時光糖果罐...">
+      <label class="lbl">📝 故事大綱 / 畫面靈感（選填，或貼上從 Google / Gemini 獲得的故事）</label>
+      <textarea id="inpIdea" rows="3" class="inp" style="margin-bottom:6px" placeholder="輸入想拍的故事內容，或留空由系統自動依主題擴寫全套10秒分鏡..."></textarea>
+    </div>
+
+    <!-- 輸入源 B：🖼️ 提供一張圖片自動產生故事（雙軌引擎：本機視覺分析直出 ＋ 免費 Gemini 看圖寫故事） -->
+    <div id="imageBox" class="hidden img-drop">
+      <label class="lbl" style="color:#1E40AF;font-size:13px">🖼️ 上傳一張照片或 AI 繪圖，自動分析畫面光影並延伸成完整故事！</label>
+      <input type="file" id="inpImgFile" accept="image/*" style="font-size:12px;margin-bottom:6px">
+
+      <div id="imgPreviewCard" class="img-prev-wrap hidden">
+        <img id="imgPreviewThumb" class="img-prev-thumb" src="" alt="預覽圖">
+        <div style="flex:1;min-width:190px">
+          <div id="imgAnalysisBadge" style="font-size:11px;font-weight:800;color:#1D4ED8;background:#DBEAFE;padding:3px 8px;border-radius:8px;display:inline-block;margin-bottom:4px"></div>
+          <div id="imgAutoStoryText" style="font-size:12px;color:var(--ink);line-height:1.45;margin-bottom:6px"></div>
+          <button type="button" id="btnGeminiVisionStory" class="btn-google" style="padding:7px 10px;font-size:11.5px;margin-bottom:0">✨ 複製「看圖寫感人故事」指令並開 Gemini ↗</button>
+        </div>
+      </div>
+
+      <div style="margin-top:8px">
+        <label class="lbl" style="font-size:11.5px;color:#1E40AF">✏️ 圖片主角或想延伸的劇情補充（選填，系統已自動依圖片色調與檔名推演故事）：</label>
+        <input type="text" id="inpImgKeyword" class="inp" style="margin-bottom:0;background:#fff" placeholder="例：阿嬤在古早味廚房煮紅豆湯、小女孩與流浪小狗...">
+      </div>
+    </div>
+
+    <!-- 輸入源 C：本機音檔 -->
+    <div id="audioBox" class="hidden" style="border:2px dashed #C4B5FD;background:var(--soft);border-radius:14px;padding:14px;margin-bottom:8px">
+      <div style="text-align:center;margin-bottom:8px">
+        <input type="file" id="inpAudio" accept="audio/*" style="font-size:12px;margin-bottom:6px">
+        <div id="audioInfo" style="font-size:12px;color:var(--pri);font-weight:700">選擇音檔後自動偵測秒數，並為每一段 10 秒生成對應分鏡提示詞</div>
+      </div>
+      <label class="lbl">🎵 音檔主題 / 旁白重點補充（選填，預設自動帶入音檔檔名）</label>
+      <input type="text" id="inpAudioNote" class="inp" style="margin-bottom:0;background:#fff" placeholder="例：溫馨配樂旁白、阿嬤講古錄音...">
+    </div>
+
+    <!-- 輸入源 D：隨機靈感 / Google搜尋 -->
+    <div id="randomPanel" class="hidden" style="background:#FFFBEB;border:2px solid #F59E0B;border-radius:16px;padding:12px;margin-bottom:8px">
+      <label class="lbl" style="color:#92400E">🔍 選擇故事類型與指定「故事秒數」（自動排除已看過的故事）：</label>
+      <div class="grid2" style="margin-bottom:8px">
+        <select id="selStoryGenre" class="inp" style="margin-bottom:0;background:#fff;border-color:#F59E0B;font-weight:700">
+          <option value="ALL">🌟 全部類型輪替（每日自動推陳出新）</option>
+          <option value="溫馨療癒親子與寵物故事">🐾 溫馨療癒（小女孩與狗、祖孫情）</option>
+          <option value="1960年代台灣懷舊古早味故事">🏮 台灣 5、60 年代懷舊柑仔店記憶</option>
+          <option value="生活實用小妙招與居家智慧">💡 生活實用小妙招與居家清潔智慧</option>
+          <option value="高齡防詐騙與長輩健康關懷故事">🛡️ 長輩防詐騙提醒與樂齡健康保健</option>
+          <option value="自然科學小常識與生態奧秘">🌿 自然生態與生活科學小常識</option>
+          <option value="傳統節氣風物與台灣民俗文化">🎭 傳統節氣風物與布袋戲在地文化</option>
+          <option value="勵志正向成長與閱讀想像力故事">✨ 正向鼓勵、勇氣與親子閱讀魔法</option>
+        </select>
+        <select id="selGoogleStorySec" class="inp" style="margin-bottom:0;background:#fff;border-color:#F59E0B;font-weight:800;color:var(--pri)">
+          <option value="10">⏱️ 搜尋 10 秒故事（1 幕）</option>
+          <option value="20">⏱️ 搜尋 20 秒故事（2 幕）</option>
+          <option value="30" selected>⏱️ 搜尋 30 秒故事（3 幕）</option>
+          <option value="40">⏱️ 搜尋 40 秒故事（4 幕）</option>
+          <option value="60">⏱️ 搜尋 60 秒故事（1分鐘 / 6幕）</option>
+          <option value="90">⏱️ 搜尋 90 秒故事（1分半 / 9幕）</option>
+          <option value="120">⏱️ 搜尋 120 秒故事（2分鐘 / 12幕）</option>
+        </select>
+      </div>
+
+      <div class="grid2" style="margin-bottom:8px">
+        <button type="button" id="btnNextRandom" class="btn-out" style="border-color:#F59E0B;font-weight:800">🎲 抽一則不重複故事</button>
+        <button type="button" id="btnGoogleSearchStory" class="btn-google" style="margin-bottom:0">🌐 Google 搜尋並直出分鏡 ↗</button>
+      </div>
+
+      <div id="rndPreview" style="font-size:13px;color:var(--ink);background:#fff;padding:10px;border-radius:10px;border:1px solid #FDE68A"></div>
+    </div>
+
+    <!-- ✅ 緊貼在輸入源正下方的核心一鍵生成按鍵！ -->
+    <button type="button" id="btnDirectMaster" class="btn-direct">⚡ 一鍵生成全套 10 秒分鏡提示詞（立即展開在下方！）</button>
+
+    <!-- 進階細節設定 -->
+    <label class="lbl">⚡ 黃金前 3 秒吸睛開場（Hook）</label>
+    <div class="grid2 sm-grid4" style="margin-bottom:12px">
+      <button type="button" class="hook-btn act" data-hook="❓ 懸念反問型">❓ 懸念反問型</button>
+      <button type="button" class="hook-btn" data-hook="💖 溫馨金句型">💖 溫馨金句型</button>
+      <button type="button" class="hook-btn" data-hook="😲 視覺驚喜型">😲 視覺驚喜型</button>
+      <button type="button" class="hook-btn" data-hook="🎯 痛點秘訣型">🎯 痛點秘訣型</button>
+    </div>
+
+    <div class="grid2" style="margin-bottom:8px">
+      <div>
+        <label class="lbl">📐 畫面比例</label>
+        <select id="selRatio" class="inp">
+          <option value="9:16" selected>9:16 直式（Reels / Shorts）</option>
+          <option value="16:9">16:9 橫式（YouTube）</option>
+          <option value="1:1">1:1 方形</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">🎨 視覺畫風</label>
+        <select id="selStyle" class="inp">
+          <option value="Pixar 3D animation style, warm cinematic lighting, 8k">皮克斯 3D 動畫</option>
+          <option value="1960s Taiwanese nostalgic watercolor illustration, warm sunlight">台灣懷舊水彩</option>
+          <option value="Studio Ghibli inspired healing Japanese anime style">吉卜力療癒手繪</option>
+          <option value="Cinematic photorealistic 35mm film photography">電影級寫實光影</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-bottom:8px">
+      <div>
+        <label class="lbl">🎥 運鏡節奏</label>
+        <select id="selCam" class="inp">
+          <option value="smooth cinematic push-in and gentle tracking shot" selected>電影感推拉運鏡</option>
+          <option value="warm handheld close-up emotional shot">溫柔跟拍特寫</option>
+          <option value="dynamic wide-to-close establishing pan">大景切特寫轉場</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">🔗 首尾幀連貫銜接</label>
+        <select id="selContinuity" class="inp">
+          <option value="on" selected>開啟（自動標註首尾幀動作銜接）</option>
+          <option value="off">關閉（獨立單幕生成）</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 登場角色卡＋多人多角色獨立聲音區分 -->
+    <div class="cast-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px">
+        <span style="font-size:13px;font-weight:900;color:var(--pri)">🎭 第一部分：選擇登場人物角色卡（可複選多位人物）</span>
+        <button type="button" id="btnOpenAddChar" class="btn-sub" style="padding:6px 10px;font-size:11px">➕ 新增自訂人物</button>
+      </div>
+      <div style="font-size:11px;color:var(--mut);margin-bottom:8px">點擊下方卡片可<strong>同時勾選多位登場人物</strong>，自動將人物外觀與預設聲線帶入分鏡提示詞：</div>
+      <div id="castGrid" class="grid2 sm-grid3" style="margin-bottom:12px"></div>
+
+      <div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:14px;padding:11px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+          <label style="font-size:12px;font-weight:900;color:var(--pri)">🎙️ 第二部分：本片需要幾人／幾種角色聲音？</label>
+          <select id="selVoiceCount" class="inp" style="margin-bottom:0;padding:6px 10px;font-size:12px;font-weight:800;width:auto;background:var(--soft)">
+            <option value="0">0 人（純畫面／無旁白配音）</option>
+            <option value="1">1 人聲音（單人旁白／獨白）</option>
+            <option value="2" selected>2 人聲音（雙人對話／同齡雙人）</option>
+            <option value="3">3 人聲音（三人家庭／同齡三人組）</option>
+            <option value="4">4 人聲音（四人熱鬧群像）</option>
+            <option value="5">5 人聲音（五人多角色劇情）</option>
+            <option value="6">6 人聲音（六人大型群像劇）</option>
+          </select>
+        </div>
+        <div style="font-size:11px;color:#047857;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:8px;padding:6px 8px;margin-bottom:8px">
+          💡 <strong>多人／同齡聲音區分：</strong>勾選上方人物會自動同步帶入下方角色欄位，也可手動選擇不同年齡音質＋獨立音高語速（Speaker 1 ~ Speaker 6），多人同框說話絕不混音！
+        </div>
+        <div id="voiceSlotsContainer"></div>
+      </div>
+    </div>
+
+    <details style="margin-top:8px">
+      <summary style="font-size:12px;font-weight:800;color:var(--mut);cursor:pointer">🛠️ 進階模式：手動複製指令給外部 Gemini 生成 3 版故事</summary>
+      <div style="padding-top:8px">
+        <button type="button" id="btnCopyStep1" class="btn-main">📋 複製指令給 Gemini 生成 3 版故事 ↗</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- ⬇️ 下半部：一按下「一鍵生成全套10秒提示詞」，結果立刻展開在此區域！ -->
+  <section id="resultSection" class="card hidden" style="border:2px solid var(--pri);box-shadow:0 8px 24px -6px rgba(91,62,150,.2)">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
+      <span class="sec-tag" style="margin-bottom:0;background:var(--pri);color:#fff">✨ 生成結果 · 中文劇情改動自動連動英文提示詞更新</span>
+      <span id="doneProgressBadge" style="font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0">已完成 0 / 0 幕</span>
+    </div>
+    <h2 id="resultTitleHeading" class="sec-h">分鏡提示詞與一鍵匯出</h2>
+
+    <!-- 順暢兩階段出片導覽條 -->
+    <div id="twoStageBanner" style="background:linear-gradient(90deg,#EFF6FF,#F5F3FF);border:1.5px solid #93C5FD;border-radius:14px;padding:11px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:900;color:#1E40AF;margin-bottom:4px">🚀 最順暢出片節奏：建議「先批量生出全部首幀圖片，再一次圖生影片」！</div>
+      <div style="font-size:11px;color:#1E3A8A;line-height:1.5;margin-bottom:8px">
+        <strong>① 第一輪（生首幀圖）：</strong>點每幕藍色按鈕「🖼️ 複製首幀圖 Prompt 並開 Flow」，先在 Flow 選 <em>Image</em> 把每幕的首幀圖片全部生好並下載（若您已上傳照片生故事，第 1 幕可直接用您上傳的照片當首幀！）。<br>
+        <strong>② 第二輪（圖生影片）：</strong>切到 Flow 的 <em>Frames to Video</em> 上傳首幀圖，點每幕橘色按鈕「🎥 複製圖生影動作 Prompt」，影片就會完全照首幀圖動起來！
+      </div>
+      <div class="grid2">
+        <button type="button" id="btnCopyAllImgPrompts" class="img-btn" style="padding:9px 8px;font-size:12px">📋 一次複製全部「首幀圖片」Prompt</button>
+        <button type="button" id="btnCopyAllVidPrompts" class="flow-btn" style="padding:9px 8px;font-size:12px">📋 一次複製全部「圖生影片」Prompt</button>
+      </div>
+    </div>
+
+    <div id="scenesList"></div>
+
+    <div style="background:linear-gradient(90deg,#F3EEFF,#FFFBEB);border:1px solid #DDD6FE;border-radius:16px;padding:12px;margin:12px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:12px;font-weight:800;color:var(--pri)">📱 社群發佈文案與 Hashtag 自動包</span>
+        <button type="button" id="btnCopySocial" class="btn-sub" style="padding:5px 10px;font-size:11px">📋 複製文案</button>
+      </div>
+      <textarea id="socialBox" rows="4" class="inp" style="margin-bottom:0;background:#fff"></textarea>
+    </div>
+
+    <div class="grid3">
+      <button type="button" id="btnExportSrt" class="btn-sub" style="background:var(--ok);padding:12px 6px">🎬 下載剪映 .srt</button>
+      <button type="button" id="btnExportTxt" class="btn-sub" style="padding:12px 6px">📥 下載腳本 .txt</button>
+      <button type="button" id="btnSaveHist" class="btn-sub" style="background:var(--gold);padding:12px 6px">💾 儲存本機專案</button>
+    </div>
+  </section>
+
+</main>
+<div id="toast" class="toast"></div>
+</div>
+
+<!-- 彈窗：新增網站 -->
+<div id="portalModal" class="modal hidden">
+  <div class="modal-card">
+    <h3 style="font-size:15px;font-weight:800;color:var(--pri);margin-bottom:10px">➕ 新增常用影片網站</h3>
+    <input type="text" id="pName" class="inp" placeholder="網站名稱（例：Runway Gen-3）">
+    <input type="url" id="pUrl" class="inp" placeholder="網址（例：https://runwayml.com）">
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button type="button" class="btn-out" data-close="portalModal">取消</button>
+      <button type="button" id="btnSavePortal" class="btn-sub">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 彈窗：新增人物角色 -->
+<div id="charModal" class="modal hidden">
+  <div class="modal-card">
+    <h3 style="font-size:15px;font-weight:800;color:var(--pri);margin-bottom:10px">🎭 新增自訂人物角色卡</h3>
+    <label class="lbl">人物名稱</label>
+    <input type="text" id="cName" class="inp" placeholder="例：雙胞胎姊姊小美、王阿公、鄰居陳阿姨">
+    <label class="lbl">英文外觀描述（確保每幕首幀圖片人物長相一致）</label>
+    <input type="text" id="cLook" class="inp" placeholder="例：7-year-old Taiwanese girl in pink dress with braids">
+    <label class="lbl">預設聲線種類</label>
+    <select id="cVoiceIdx" class="inp"></select>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button type="button" class="btn-out" data-close="charModal">取消</button>
+      <button type="button" id="btnSaveChar" class="btn-sub">儲存人物</button>
+    </div>
+  </div>
+</div>
+
+<!-- 彈窗：歷史專案 -->
+<div id="histModal" class="modal hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="font-size:15px;font-weight:800;color:var(--pri)">📂 本機歷史專案</h3>
+      <button type="button" class="btn-out" data-close="histModal" style="padding:4px 8px">✕</button>
+    </div>
+    <div id="histList"></div>
+  </div>
+</div>
+
+<!-- 彈窗：安裝桌面 App 教學 -->
+<div id="pwaModal" class="modal hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="font-size:15px;font-weight:800;color:var(--pri)">📲 安裝「珍妮花工作室」至手機桌面</h3>
+      <button type="button" class="btn-out" data-close="pwaModal" style="padding:4px 8px">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--ink);line-height:1.6">
+      <p style="margin-bottom:8px">本網頁已內建 <strong>PWA 原生圖示與全螢幕視窗設定</strong>：</p>
+      <p style="margin-bottom:6px"><strong>Android（Chrome）：</strong>點右上角 <strong>「⋮」</strong> $\rightarrow$ 選 <strong>「加到主畫面」或「安裝應用程式」</strong>，桌面就會出現專屬紫金場記板圖示！</p>
+      <p style="margin-bottom:12px"><strong>iPhone（Safari）：</strong>點下方 <strong>「分享方框箭頭」</strong> $\rightarrow$ 選 <strong>「加入主畫面」</strong> 即可全螢幕啟動。</p>
+      <button type="button" id="btnResetInModal" class="btn-out" style="width:100%;color:#DC2626;border-color:#FECACA">🔄 清空重置目前畫面資料</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const svgIcon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5B3E96"/><stop offset="60%" stop-color="#7C5AC2"/><stop offset="100%" stop-color="#D97706"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#g)"/><text x="256" y="315" font-size="240" text-anchor="middle" fill="#FFFFFF">🎬</text></svg>';
+  const iconDataUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgIcon);
+  if(document.getElementById('pwaIconLink'))document.getElementById('pwaIconLink').href=iconDataUrl;
+  if(document.getElementById('appleIconLink'))document.getElementById('appleIconLink').href=iconDataUrl;
+  try{
+    const manifestObj={name:'珍妮花工作室 JENNIFER STUDIO',short_name:'珍妮花工作室',start_url:'./?openExternalBrowser=1',display:'standalone',background_color:'#FBF9FF',theme_color:'#5B3E96',icons:[{src:iconDataUrl,sizes:'512x512',type:'image/svg+xml',purpose:'any maskable'}]};
+    const mBlob=new Blob([JSON.stringify(manifestObj)],{type:'application/manifest+json'});
+    if(document.getElementById('manifestLink'))document.getElementById('manifestLink').href=URL.createObjectURL(mBlob);
+  }catch(e){}
+
+  const PORTALS=[
+    {id:'p1',name:'Google Flow',url:'https://labs.google/fx/tools/flow',desc:'首推 · 先出首幀圖再圖生影',icon:'🎬',top:true},
+    {id:'p2',name:'Gemini 網頁版',url:'https://gemini.google.com/app',desc:'免費看圖寫故事／發想',icon:'✨'},
+    {id:'p3',name:'Kling 可靈 AI',url:'https://klingai.com/',desc:'首尾幀生片',icon:'🎥'},
+    {id:'p4',name:'CapCut 剪映',url:'https://www.capcut.com/',desc:'匯入 SRT 剪輯',icon:'✂️'}
+  ];
+
+  const VOICE_TYPES=[
+    {label:'👧 女童聲 A｜清脆活潑高音（開朗小女孩）',en:'bright, energetic, high-pitched 7-year-old Taiwanese girl voice'},
+    {label:'👧 女童聲 B｜輕柔甜美中音（文靜小女孩）',en:'soft, sweet, gentle mid-tone 7-year-old Taiwanese girl voice'},
+    {label:'👦 男童聲 A｜好奇清亮聲線（調皮小男孩）',en:'lively, curious, bright 8-year-old Taiwanese boy voice'},
+    {label:'👦 男童聲 B｜穩重微低聲線（誠懇小男孩）',en:'calm, earnest, slightly deeper 8-year-old Taiwanese boy voice'},
+    {label:'👩 年輕女聲 A｜陽光熱情姐姐（珍妮花）',en:'warm, sunny, enthusiastic young Taiwanese woman voice'},
+    {label:'👩 年輕女聲 B｜知性療癒說書人（溫柔旁白）',en:'soothing, lyrical, calm young Taiwanese female storyteller voice'},
+    {label:'👨 成年男聲 A｜沉穩磁性大哥哥／爸爸聲',en:'deep, steady, warm Taiwanese adult male voice'},
+    {label:'👨 成年男聲 B｜爽朗幽默青年男聲',en:'cheerful, upbeat, clear Taiwanese young man voice'},
+    {label:'👵 長輩女聲 A｜慈祥溫柔台灣阿嬤（林阿嬤）',en:'gentle, warm, loving Taiwanese elderly woman voice'},
+    {label:'👵 長輩女聲 B｜宏亮爽朗鄰居阿婆聲',en:'lively, expressive, slightly raspy Taiwanese elderly auntie voice'},
+    {label:'👴 長輩男聲 A｜渾厚智慧台灣阿公聲',en:'deep, wise, kind Taiwanese elderly man voice'},
+    {label:'🐶 可愛動物／寵物擬聲（小狗汪汪）',en:'cute happy puppy barking and playful animal sounds'}
+  ];
+
+  const VOICE_TONES=[
+    {label:'標準自然音調',en:'natural balanced pitch'},
+    {label:'偏高音・語速輕快',en:'higher pitch, lively faster pace'},
+    {label:'偏低音・語速沉穩',en:'lower pitch, calm slower pace'},
+    {label:'溫暖氣音・情感豐富',en:'warm breathy expressive tone'}
+  ];
+
+  const DEFAULT_CAST=[
+    {id:'c1',name:'珍妮花',role:'陽光熱情姐姐',look:'cheerful Taiwanese young woman in yellow knit cardigan, warm smile',voiceIdx:4,toneIdx:0,sel:true},
+    {id:'c2',name:'林阿嬤',role:'慈祥台灣阿嬤',look:'kind elderly Taiwanese grandmother with silver bun hair, floral apron',voiceIdx:8,toneIdx:2,sel:true},
+    {id:'c3',name:'小宇',role:'好奇小男孩',look:'energetic 8-year-old Taiwanese boy in striped t-shirt and cap',voiceIdx:2,toneIdx:1,sel:false},
+    {id:'c4',name:'小美',role:'活潑小女孩',look:'cute 7-year-old Taiwanese girl with twin ponytails in yellow dress',voiceIdx:0,toneIdx:1,sel:false},
+    {id:'c5',name:'小雅',role:'文靜同齡女孩',look:'sweet 7-year-old Taiwanese girl with short bob hair in pink cardigan',voiceIdx:1,toneIdx:2,sel:false},
+    {id:'c6',name:'陳阿公',role:'智慧台灣阿公',look:'kind elderly Taiwanese grandfather in linen shirt with warm glasses',voiceIdx:10,toneIdx:2,sel:false}
+  ];
+
+  const ZH_EN_DICT=[
+    ['小女孩','a cute 7-year-old Taiwanese girl with twin ponytails'],
+    ['小美','cute Taiwanese girl Xiaomei'],
+    ['小雅','sweet Taiwanese girl Xiaoya'],
+    ['小宇','curious 8-year-old Taiwanese boy Xiaoyu'],
+    ['林阿嬤','kind elderly Taiwanese grandmother with silver bun hair in floral apron'],
+    ['阿嬤','kind elderly Taiwanese grandmother'],
+    ['阿公','kind elderly Taiwanese grandfather'],
+    ['珍妮花','cheerful Taiwanese young woman in yellow knit cardigan'],
+    ['小黃狗','a cute golden retriever puppy'],
+    ['小狗','a cute golden puppy'],
+    ['雨傘','a bright yellow umbrella'],
+    ['下雨','gentle rain falling in a Taiwanese arcade street'],
+    ['雨天','rainy afternoon atmosphere'],
+    ['騎樓','traditional Taiwanese covered arcade sidewalk'],
+    ['柑仔店','1960s nostalgic Taiwanese vintage grocery store'],
+    ['麥芽糖','glowing golden maltose candy jar'],
+    ['大同電鍋','classic vintage green Taiwanese electric rice cooker with rising steam'],
+    ['紅豆湯','warm sweet red bean soup in a porcelain bowl'],
+    ['湯圓','colorful red and white glutinous rice balls'],
+    ['檸檬','fresh yellow lemon slices'],
+    ['水壺','shiny stainless steel electric kettle'],
+    ['手機','smartphone'],
+    ['楓香葉','vibrant red and golden autumn maple leaf'],
+    ['落葉','colorful autumn leaves'],
+    ['布袋戲','intricately embroidered traditional Taiwanese glove puppet'],
+    ['音樂盒','vintage wooden music box with brass key'],
+    ['紙飛機','glowing golden paper airplane'],
+    ['彩虹','vibrant double rainbow in the sky'],
+    ['端午節','festive Dragon Boat Festival daytime'],
+    ['立蛋','balancing a raw egg upright on the table'],
+    ['擁抱','warmly hugging each other with joyful smiles'],
+    ['微笑','smiling warmly and tenderly'],
+    ['大笑','laughing happily together'],
+    ['哭泣','teary-eyed emotional expression'],
+    ['跑步','running playfully together'],
+    ['散步','walking side by side peacefully'],
+    ['揮手','waving hands warmly'],
+    ['比讚','giving a cheerful thumbs up'],
+    ['喝茶','drinking warm tea around a wooden table'],
+    ['夕陽','warm golden sunset rays'],
+    ['清晨','soft golden morning sunlight'],
+    ['夜晚','cozy warm yellow streetlamp night light'],
+    ['客廳','cozy warm Taiwanese family living room'],
+    ['廚房','bright warm home kitchen'],
+    ['公園','lush green neighborhood park'],
+    ['圖書館','sunlit cozy library desk']
+  ];
+
+  function translateZhPlotToEn(zhText){
+    if(!zhText)return '';
+    let clean=zhText.replace(/【[^】]*】/g,' ').trim();
+    const matchedPhrases=[];
+    ZH_EN_DICT.forEach(([zh,en])=>{
+      if(clean.includes(zh))matchedPhrases.push(en);
+    });
+    const uniqueEn=[...new Set(matchedPhrases)].join(', ');
+    if(uniqueEn)return `${uniqueEn} (${clean})`;
+    return `Visualizing scene: "${clean}"`;
+  }
+
+  const STORIES=[
+    {
+      id:'st01',genre:'溫馨療癒親子與寵物故事',
+      title:'小女孩與雨天流浪小黃狗',
+      idea:'放學下雨的騎樓下，綁著雙馬尾的小女孩把自己的黃色小雨傘分一半給發抖的小黃狗，一人一狗並肩走回家的溫暖陪伴故事。',
+      shots:[
+        {plot:'【前3秒 Hook】大雨滂沱的騎樓角落，一隻淋濕的小黃狗縮在紙箱旁發抖，小女孩撐著黃色小雨傘停下腳步',imgEn:'First frame still image: Close-up of a cute wet golden puppy shivering beside a cardboard box under a rainy Taiwanese street arcade, a 7-year-old girl in yellow raincoat holding a bright yellow umbrella stepping close, soft emotional lighting',vidEn:'Image-to-video motion: Gentle raindrops falling, the puppy shivering slightly and looking up with hopeful eyes as the little girl slowly lowers her yellow umbrella to shelter the puppy, smooth cinematic push-in',end:'一雙紅色小雨鞋走近，一把暖黃色小雨傘緩緩遮住小狗',sfx:'細雨滴落聲、小狗輕微嗚咽聲',tone:'語氣：心疼溫柔、輕聲呼喚',text:'小狗狗別怕，我的雨傘分你一半喔！'},
+        {plot:'小女孩蹲下身用小手帕幫小狗擦乾毛髮，小狗開心搖尾巴並親暱舔了小女孩的手心',imgEn:'First frame still image: Cute 7-year-old Taiwanese girl with twin ponytails kneeling under a yellow umbrella holding a white cotton handkerchief beside the golden puppy, warm heartwarming smile',vidEn:'Image-to-video motion: The little girl gently wipes the puppy wet fur with the handkerchief while the golden puppy wags its tail happily and licks her hand, warm soft lighting',end:'小狗親暱地舔了小女孩的手心，兩人一起起身走進夕陽微光',sfx:'溫暖木吉他撥弦、小狗開心輕叫聲',tone:'語氣：開心親切、充滿愛心',text:'一份小小的善意，就能成為彼此最溫暖的依靠。'},
+        {plot:'雨過天晴夕陽灑落街道，小女孩與小狗並肩散步走回家，留下溫暖治癒金句收尾',imgEn:'First frame still image: Rain stopping with golden sunset rays breaking through clouds over a cozy Taiwanese neighborhood lane, the little girl and happy golden puppy standing side by side',vidEn:'Image-to-video motion: Golden sunset light shimmering on wet pavement as the little girl and golden puppy walk side by side happily down the lane, gentle tracking shot from behind',end:'一人一狗背影在夕陽下定格，溫暖治癒收尾',sfx:'雨停鳥鳴聲、暖心鋼琴尾奏',tone:'語氣：溫暖堅定、微笑收尾',text:'以後每天放學，我們都要一起回家！'}
+      ]
+    },
+    {
+      id:'st02',genre:'1960年代台灣懷舊古早味故事',
+      title:'柑仔店裡的時光糖果罐',
+      idea:'黃昏的1960年代台灣柑仔店，小宇盯著玻璃罐裡發光的麥芽糖，林阿嬤微笑遞出一顆勇氣糖果，珍妮花舉起復古相機記錄祖孫溫暖瞬間。',
+      shots:[
+        {plot:'【前3秒 Hook】夕陽餘暉照進1960年代台灣老柑仔店，小宇仰頭盯著玻璃罐裡閃閃發亮的麥芽糖好奇發問',imgEn:'First frame still image: Glowing golden maltose candy jar on a wooden counter in a 1960s Taiwanese vintage grocery store, warm sunset rays through doorway, cheerful 8-year-old boy looking up in amazement',vidEn:'Image-to-video motion: Warm dust motes dancing in golden sunset beams as the boy leans closer to the glowing candy jar with wide curious eyes, gentle camera push-in',end:'小宇扶著木櫃檯仰頭看糖果罐，林阿嬤微笑走近打開罐蓋',sfx:'黃昏蟬鳴聲、老木門輕微吱呀聲',tone:'語氣：好奇驚喜（台語韻味：阿嬤、麥芽糖）',text:'阿嬤！為什麼這顆麥芽糖在發亮？'},
+        {plot:'林阿嬤慈祥笑著從玻璃罐夾出一顆金黃麥芽糖遞給小宇，溫柔安撫小宇明天上台比賽的緊張心情',imgEn:'First frame still image: Kind elderly Taiwanese grandmother with silver bun hair in floral apron holding a glowing golden maltose candy toward the 8-year-old boy in warm nostalgic shop lighting',vidEn:'Image-to-video motion: The grandmother smiles warmly and gently places the golden candy into the boy open hands as his nervous expression turns into a bright smile',end:'小宇雙手接過發光糖果露出燦爛笑容',sfx:'溫暖木吉他單音撥弦、輕柔微風聲',tone:'語氣：慈祥溫柔、慢速安撫',text:'因為這裡面裝著阿嬤給你的勇氣呀！'},
+        {plot:'珍妮花舉起復古底片相機按下快門，將林阿嬤與小宇的幸福笑容定格成懷舊明信片畫面',imgEn:'First frame still image: Cheerful Taiwanese young woman in yellow knit cardigan holding a vintage film camera, framing the smiling grandmother and boy together in golden hour light',vidEn:'Image-to-video motion: The young woman presses the vintage camera shutter with a soft warm flash as the grandmother and boy hug and smile joyfully',end:'相機閃光微亮，三人笑臉定格',sfx:'復古相機喀嚓快門聲、暖心鋼琴尾奏',tone:'語氣：溫暖堅定',text:'最甜的不是糖果，是一家人在一起的時光。'}
+      ]
+    },
+    {
+      id:'st03',genre:'生活實用小妙招與居家智慧',
+      title:'一顆檸檬讓水壺亮晶晶',
+      idea:'林阿嬤看著電熱水壺底部的白色水垢發愁，珍妮花切了幾片檸檬放進水壺煮沸靜置，不用刷子就讓內膽恢復鏡面般閃亮。',
+      shots:[
+        {plot:'【前3秒 Hook】電熱水壺底部厚厚一層白色水垢特寫，林阿嬤皺眉嘆氣以為水壺壞掉了',imgEn:'First frame still image: Open stainless steel electric kettle showing white limescale buildup inside on a bright Taiwanese kitchen counter, elderly grandmother looking puzzled',vidEn:'Image-to-video motion: Camera tilts slightly over the open kettle as the elderly grandmother frowns and sighs gently, pointing at the white limescale inside',end:'珍妮花拿著一顆新鮮黃檸檬微笑走進廚房',sfx:'水壺蓋打開金屬聲、疑惑嘆氣聲',tone:'語氣：苦惱疑惑',text:'這個熱水壺底白白一層刷不掉，是不是該換新的了？'},
+        {plot:'珍妮花把新鮮黃檸檬切片放進水壺加水煮沸，天然檸檬酸溫和溶解頑固水垢',imgEn:'First frame still image: Cheerful Taiwanese young woman placing fresh yellow lemon slices into the electric kettle filled with clear water in warm morning kitchen light',vidEn:'Image-to-video motion: Gentle boiling bubbles rise around the yellow lemon slices inside the kettle, steam curling upward in warm sunlight',end:'倒掉檸檬水後，水壺內膽變得如新的一樣閃閃發亮',sfx:'水煮沸咕嚕聲、清脆閃亮音效',tone:'語氣：自信分享生活妙招',text:'不用買清潔劑！放半顆檸檬煮沸靜置十分鐘，水垢自動消失！'},
+        {plot:'林阿嬤看著亮晶晶如鏡面的水壺內膽開心豎起大拇指，兩人擊掌分享環保又省錢的居家智慧',imgEn:'First frame still image: Elderly grandmother and young woman standing side by side in the bright kitchen inspecting a spotless mirror-shiny stainless kettle',vidEn:'Image-to-video motion: The grandmother eyes light up with delight as she gives an enthusiastic thumbs up and high-fives the young woman',end:'兩人開心擊掌定格',sfx:'輕快生活節目配樂、爽朗笑聲',tone:'語氣：讚嘆實用',text:'哇！真的跟新買的一樣亮晶晶，環保又省錢！'}
+      ]
+    }
+  ];
+
+  function loadCastData(){
+    try{
+      const saved=JSON.parse(localStorage.getItem('jf_cast_v2')||'null');
+      if(Array.isArray(saved)&&saved.length)return saved;
+    }catch(e){}
+    return DEFAULT_CAST;
+  }
+
+  const S={
+    mode:'text',hook:'❓ 懸念反問型',desktop:false,sec:30,
+    workflow:'img2vid',
+    voiceCount:2,
+    uploadedImgInfo:null,
+    voiceSlots:[
+      {name:'珍妮花',typeIdx:4,toneIdx:0},
+      {name:'林阿嬤',typeIdx:8,toneIdx:2},
+      {name:'小美',typeIdx:0,toneIdx:1},
+      {name:'小雅',typeIdx:1,toneIdx:2},
+      {name:'小宇',typeIdx:2,toneIdx:1},
+      {name:'陳阿公',typeIdx:10,toneIdx:2}
+    ],
+    portals:JSON.parse(localStorage.getItem('jf_portals')||'null')||PORTALS,
+    cast:loadCastData(),
+    hist:JSON.parse(localStorage.getItem('jf_hist')||'[]'),
+    seenIds:JSON.parse(localStorage.getItem('jf_seen_stories')||'[]'),
+    lastStoryId:localStorage.getItem('jf_last_story_id')||'',
+    scenes:[]
+  };
+
+  const $=id=>document.getElementById(id);
+  function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2500)}
+  function copyText(txt,msg){
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(()=>toast(msg||'✅ 已複製到剪貼簿')).catch(()=>fallbackCopy(txt,msg));
+    }else fallbackCopy(txt,msg);
+  }
+  function fallbackCopy(txt,msg){
+    const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(msg||'✅ 已複製');}catch(e){toast('⚠️ 請手動長按複製');}
+    document.body.removeChild(ta);
+  }
+
+  function fmtTime(sec){
+    const h=Math.floor(sec/3600);
+    const m=Math.floor((sec%3600)/60);
+    const s=Math.floor(sec%60);
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+',000';
+  }
+
+  function setDuration(sec){
+    const val=Math.max(10,Math.min(300,Math.round((parseInt(sec,10)||30)/10)*10));
+    S.sec=val;
+    $('inpSec').value=val;
+    if($('selGoogleStorySec'))$('selGoogleStorySec').value=String(val);
+    $('sceneCountBadge').textContent=`共 ${val/10} 幕（${val} 秒）`;
+    document.querySelectorAll('.dur-pill').forEach(b=>b.classList.toggle('act',parseInt(b.dataset.sec,10)===val));
+  }
+  document.querySelectorAll('.dur-pill').forEach(b=>b.onclick=()=>setDuration(b.dataset.sec));
+  $('inpSec').onchange=function(){setDuration(this.value)};
+  $('selGoogleStorySec').onchange=function(){setDuration(this.value)};
+
+  $('wfImg2Vid').onclick=function(){
+    S.workflow='img2vid';
+    this.classList.add('act');$('wfTxt2Vid').classList.remove('act');
+    toast('🖼️➡️🎥 已切換為「先生首幀圖片 → 再圖生影片」雙步模式');
+    if(S.scenes.length)renderScenes($('inpTitle').value.trim());
+  };
+  $('wfTxt2Vid').onclick=function(){
+    S.workflow='txt2vid';
+    this.classList.add('act');$('wfImg2Vid').classList.remove('act');
+    toast('⚡ 已切換為「純文字生影片」單步模式');
+    if(S.scenes.length)renderScenes($('inpTitle').value.trim());
+  };
+
+  function getFreshUnseenStory(genreFilter, isPageBoot){
+    const g=genreFilter||'ALL';
+    const basePool=g==='ALL'?STORIES:STORIES.filter(s=>s.genre===g);
+    const pool=basePool.length?basePool:STORIES;
+
+    let candidates=pool.filter(s=>!S.seenIds.includes(s.id)&&s.id!==S.lastStoryId);
+    if(!candidates.length){
+      const poolIds=pool.map(x=>x.id);
+      S.seenIds=S.seenIds.filter(id=>!poolIds.includes(id));
+      candidates=pool.filter(s=>s.id!==S.lastStoryId);
+      if(!candidates.length)candidates=pool;
+    }
+
+    const todayStr=new Date().toISOString().slice(0,10);
+    const pick=candidates[Math.floor(Math.random()*candidates.length)];
+
+    S.lastStoryId=pick.id;
+    if(!S.seenIds.includes(pick.id))S.seenIds.push(pick.id);
+    localStorage.setItem('jf_last_story_id',S.lastStoryId);
+    localStorage.setItem('jf_seen_stories',JSON.stringify(S.seenIds));
+
+    const remainCount=STORIES.filter(s=>!S.seenIds.includes(s.id)).length;
+    $('dailyFreshLabel').innerHTML=`<strong>${todayStr} 推薦【${pick.title}】</strong>（${pick.genre}）`;
+    $('poolRemainBadge').textContent=`未重複新題庫：${remainCount===0?STORIES.length:remainCount}/${STORIES.length} 則`;
+    $('rndPreview').innerHTML=`<span style="font-size:11px;font-weight:800;color:var(--pri)">[${pick.genre}]</span><br><strong>【${pick.title}】</strong><br>${pick.idea}`;
+    $('inpTitle').value=pick.title;
+    $('inpIdea').value=pick.idea;
+
+    if(!isPageBoot)toast(`✨ 已換上全新故事：《${pick.title}》`);
+    return pick;
+  }
+
+  $('btnRefreshFresh').onclick=()=>getFreshUnseenStory('ALL',false);
+  $('btnNextRandom').onclick=()=>getFreshUnseenStory($('selStoryGenre').value,false);
+  $('selStoryGenre').onchange=()=>getFreshUnseenStory($('selStoryGenre').value,false);
+
+  // 🖼️ 以圖生故事：本機分析圖片色調/比例，自動生成專屬故事大綱＋支援一鍵呼叫 Gemini 看圖寫故事
+  $('inpImgFile').onchange=function(e){
+    const f=e.target.files[0];if(!f)return;
+    const url=URL.createObjectURL(f);
+    const img=new Image();
+    img.onload=function(){
+      // 透過 Canvas 採樣圖片主色調與明暗氛圍
+      const cvs=document.createElement('canvas');
+      cvs.width=32;cvs.height=32;
+      const ctx=cvs.getContext('2d');
+      ctx.drawImage(img,0,0,32,32);
+      const data=ctx.getImageData(0,0,32,32).data;
+      let r=0,g=0,b=0,n=data.length/4;
+      for(let i=0;i<data.length;i+=4){r+=data[i];g+=data[i+1];b+=data[i+2];}
+      r=Math.round(r/n);g=Math.round(g/n);b=Math.round(b/n);
+      const bright=(r+g+b)/3;
+      let mood='溫暖懷舊金黃光影',enMood='warm golden nostalgic sunlight, heartwarming atmosphere';
+      if(g>r&&g>b){mood='清新自然綠意療癒氛圍';enMood='fresh natural greenery, peaceful healing sunlight';}
+      else if(b>r&&b>g){mood='靜謐深邃藍調微光氛圍';enMood='serene twilight blue mood, gentle soft glow';}
+      else if(bright<85){mood='溫馨夜晚暖黃燈光氛圍';enMood='cozy warm evening streetlamp glow, emotional night mood';}
+
+      const rawTitle=f.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').trim()||'珍藏照片裡的溫暖故事';
+      const userKw=$('inpImgKeyword').value.trim();
+      const subject=userKw||rawTitle;
+      const autoIdea=`以這張「${subject}」畫面作為第 1 幕首幀起點，在${mood}中展開一段 ${S.sec} 秒的動人故事：鏡頭從這張照片的細節緩緩推進，帶出人物之間的溫柔情感與生活智慧，最後留下令人回味的暖心金句。`;
+
+      S.uploadedImgInfo={title:subject,mood,enMood,idea:autoIdea};
+      $('inpTitle').value=subject;
+      $('inpIdea').value=autoIdea;
+
+      $('imgPreviewThumb').src=url;
+      $('imgAnalysisBadge').textContent=`✅ 已讀取圖片（${img.width}x${img.height} · ${mood}）`;
+      $('imgAutoStoryText').textContent=autoIdea;
+      $('imgPreviewCard').classList.remove('hidden');
+      toast('🖼️ 已依圖片氛圍自動生成故事！可直接按下方橘色鈕出分鏡');
+    };
+    img.src=url;
+  };
+
+  $('inpImgKeyword').oninput=function(){
+    if(!S.uploadedImgInfo)return;
+    const subject=this.value.trim()||S.uploadedImgInfo.title;
+    const autoIdea=`以這張「${subject}」畫面作為第 1 幕首幀起點，在${S.uploadedImgInfo.mood}中展開一段 ${S.sec} 秒的動人故事：鏡頭從這張照片的細節緩緩推進，帶出人物之間的溫柔情感與生活智慧，最後留下令人回味的暖心金句。`;
+    $('inpTitle').value=subject;
+    $('inpIdea').value=autoIdea;
+    $('imgAutoStoryText').textContent=autoIdea;
+  };
+
+  $('btnGeminiVisionStory').onclick=function(){
+    const subj=$('inpTitle').value.trim()||'我上傳的這張圖片';
+    const prompt=`請仔細觀察我上傳的這張圖片（主題：${subj}），幫我以這張圖片作為「第 1 幕首幀畫面」，編寫一個總長 ${S.sec} 秒（共 ${S.sec/10} 幕，每幕 10 秒）的溫馨感人短影音故事！\n請依序寫出：\n1. 故事標題\n2. 完整故事大綱\n3. 第 1 幕到第 ${S.sec/10} 幕的中文劇情與角色台詞。`;
+    copyText(prompt,'✨ 已複製「看圖寫故事」指令！請在 Gemini 貼上圖片與指令');
+    setTimeout(()=>window.open('https://gemini.google.com/app','_blank'),400);
+  };
+
+  function syncSelectedCastToVoices(){
+    const selected=S.cast.filter(c=>c.sel);
+    if(selected.length>0){
+      const targetCnt=Math.min(6,Math.max(1,selected.length));
+      $('selVoiceCount').value=String(targetCnt);
+      selected.forEach((c,idx)=>{
+        if(idx<6){
+          S.voiceSlots[idx]={
+            name:c.name,
+            typeIdx:typeof c.voiceIdx==='number'?c.voiceIdx:(idx%VOICE_TYPES.length),
+            toneIdx:typeof c.toneIdx==='number'?c.toneIdx:(idx%VOICE_TONES.length)
+          };
+        }
+      });
+    }
+    renderVoiceSlots();
+  }
+
+  function renderCast(){
+    $('castGrid').innerHTML=S.cast.map(c=>{
+      const vLabel=(VOICE_TYPES[c.voiceIdx]||VOICE_TYPES[0]).label.split('｜')[0];
+      return `
+        <div class="cast-item ${c.sel?'act':''}" onclick="toggleCast('${c.id}')">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+            <strong style="font-size:13px;color:var(--pri)">${c.sel?'☑️':'⬜'} ${c.name}</strong>
+            ${c.custom?`<button type="button" onclick="event.stopPropagation();delCast('${c.id}')" style="font-size:10px;color:#DC2626;background:none">✕</button>`:`<span style="font-size:10px;padding:1px 6px;border-radius:99px;background:#EDE9FE;color:var(--pri);font-weight:700">${c.role||'角色'}</span>`}
+          </div>
+          <div style="font-size:10px;color:var(--ok);font-weight:700;margin-bottom:2px">🎙️ 預設：${vLabel}</div>
+          <div style="font-size:10px;color:var(--mut);line-height:1.3">外觀：${c.look}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.toggleCast=function(id){
+    const c=S.cast.find(x=>x.id===id);
+    if(c){
+      c.sel=!c.sel;
+      localStorage.setItem('jf_cast_v2',JSON.stringify(S.cast));
+      renderCast();
+      syncSelectedCastToVoices();
+      const cnt=S.cast.filter(x=>x.sel).length;
+      toast(c.sel?`☑️ 已勾選「${c.name}」（目前共 ${cnt} 位人物登場）`:`⬜ 已取消勾選「${c.name}」`);
+    }
+  };
+  window.delCast=function(id){
+    S.cast=S.cast.filter(x=>x.id!==id);
+    localStorage.setItem('jf_cast_v2',JSON.stringify(S.cast));
+    renderCast();
+    syncSelectedCastToVoices();
+  };
+
+  $('btnOpenAddChar').onclick=function(){
+    $('cVoiceIdx').innerHTML=VOICE_TYPES.map((vt,idx)=>`<option value="${idx}">${vt.label}</option>`).join('');
+    $('charModal').classList.remove('hidden');
+  };
+  $('btnSaveChar').onclick=function(){
+    const n=$('cName').value.trim(),l=$('cLook').value.trim(),vIdx=parseInt($('cVoiceIdx').value,10)||0;
+    if(!n||!l)return toast('請填寫人物名稱與外觀描述');
+    S.cast.push({id:'c'+Date.now(),name:n,role:'自訂人物',look:l,voiceIdx:vIdx,toneIdx:S.cast.length%VOICE_TONES.length,sel:true,custom:true});
+    localStorage.setItem('jf_cast_v2',JSON.stringify(S.cast));
+    $('cName').value='';$('cLook').value='';$('charModal').classList.add('hidden');
+    renderCast();
+    syncSelectedCastToVoices();
+    toast(`✅ 已新增並勾選人物「${n}」！`);
+  };
+
+  function renderVoiceSlots(){
+    const cnt=parseInt($('selVoiceCount').value,10);
+    S.voiceCount=cnt;
+    if(cnt===0){
+      $('voiceSlotsContainer').innerHTML='<div style="font-size:11px;color:var(--mut);padding:4px 0">已設為 0 人聲音：分鏡將自動生成純環境音效與畫面提示詞，無角色對話。</div>';
+      return;
+    }
+    let html='';
+    for(let i=0;i<cnt;i++){
+      const slot=S.voiceSlots[i]||{name:'角色'+(i+1),typeIdx:i%VOICE_TYPES.length,toneIdx:i%VOICE_TONES.length};
+      const opts=VOICE_TYPES.map((vt,idx)=>`<option value="${idx}" ${slot.typeIdx===idx?'selected':''}>${vt.label}</option>`).join('');
+      const toneOpts=VOICE_TONES.map((tn,idx)=>`<option value="${idx}" ${slot.toneIdx===idx?'selected':''}>${tn.label}</option>`).join('');
+      html+=`
+        <div class="voice-slot">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            <span style="font-size:11px;font-weight:800;color:var(--pri);white-space:nowrap">第 ${i+1} 人 (Speaker ${i+1})：</span>
+            <input type="text" class="edit-inp" style="margin-top:0;width:100px;font-weight:800" value="${slot.name}" placeholder="角色名字" oninput="S.voiceSlots[${i}].name=this.value">
+            <select class="edit-inp" style="margin-top:0;flex:1;min-width:170px;font-weight:700" onchange="S.voiceSlots[${i}].typeIdx=parseInt(this.value,10)">${opts}</select>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="font-size:10px;font-weight:800;color:var(--mut);white-space:nowrap">🎚️ 同齡音高/語速區分：</span>
+            <select class="edit-inp" style="margin-top:0;font-size:11px;padding:5px 8px" onchange="S.voiceSlots[${i}].toneIdx=parseInt(this.value,10)">${toneOpts}</select>
+          </div>
+        </div>
+      `;
+    }
+    $('voiceSlotsContainer').innerHTML=html;
+  }
+  $('selVoiceCount').onchange=renderVoiceSlots;
+
+  if(/Line\//i.test(navigator.userAgent))$('lineBar').classList.remove('hidden');
+  function copyExtUrl(){
+    const u=new URL(location.href);u.searchParams.set('openExternalBrowser','1');
+    copyText(u.toString(),'🔗 已複製防呆外部開啟連結！');
+  }
+  $('btnLineCopy').onclick=copyExtUrl;
+  $('btnCopyExt').onclick=copyExtUrl;
+
+  $('btnLayout').onclick=function(){
+    S.desktop=!S.desktop;
+    const w=$('wrap');
+    if(S.desktop){
+      const sc=Math.min(1,window.innerWidth/980);
+      w.style.width='980px';w.style.transform='scale('+sc+')';
+      this.textContent='📱 恢復手機版';toast('🖥️ 已切換雙欄電腦寬版');
+    }else{
+      w.style.width='100%';w.style.transform='none';
+      this.textContent='🖥️ 切換電腦版';toast('📱 已恢復手機單手版');
+    }
+  };
+
+  $('btnPortal').onclick=function(){$('portalDrawer').classList.toggle('hidden');$('toolDrawer').classList.add('hidden')};
+  $('btnTool').onclick=function(){$('toolDrawer').classList.toggle('hidden');$('portalDrawer').classList.add('hidden')};
+
+  function renderPortals(){
+    $('portalGrid').innerHTML=S.portals.map(p=>`
+      <div style="background:${p.top?'#FFFBEB':'#fff'};border:1px solid ${p.top?'#F59E0B':'var(--border)'};border-radius:12px;padding:8px;display:flex;flex-direction:column;justify-content:space-between;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong style="font-size:12px;color:var(--ink)">${p.icon||'🌐'} ${p.name}</strong>
+          ${p.custom?`<button type="button" onclick="delPortal('${p.id}')" style="font-size:10px;color:#DC2626;background:none">✕</button>`:''}
+        </div>
+        <div style="font-size:10px;color:var(--mut)">${p.desc||'自訂常用網站'}</div>
+        <a href="${p.url}" target="_blank" rel="noopener" style="display:block;text-align:center;padding:5px;border-radius:8px;background:var(--pri);color:#fff;font-size:11px;font-weight:700;text-decoration:none">開啟網站 ↗</a>
+      </div>
+    `).join('');
+  }
+  window.delPortal=function(id){S.portals=S.portals.filter(x=>x.id!==id);localStorage.setItem('jf_portals',JSON.stringify(S.portals));renderPortals()};
+  $('btnOpenAddPortal').onclick=()=>$('portalModal').classList.remove('hidden');
+  $('btnSavePortal').onclick=function(){
+    const n=$('pName').value.trim(),u=$('pUrl').value.trim();
+    if(!n||!u)return toast('請填寫名稱與網址');
+    S.portals.push({id:'p'+Date.now(),name:n,url:u.startsWith('http')?u:'https://'+u,desc:'自訂網站',icon:'🔗',custom:true});
+    localStorage.setItem('jf_portals',JSON.stringify(S.portals));
+    $('pName').value='';$('pUrl').value='';$('portalModal').classList.add('hidden');renderPortals();toast('✅ 已新增常用網站');
+  };
+
+  document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.add('hidden'));
+
+  function setMode(m){
+    S.mode=m;
+    $('modeText').classList.toggle('act',m==='text');
+    $('modeImage').classList.toggle('act',m==='image');
+    $('modeAudio').classList.toggle('act',m==='audio');
+    $('modeRandom').classList.toggle('act',m==='random');
+    $('textBox').classList.toggle('hidden',m!=='text');
+    $('imageBox').classList.toggle('hidden',m!=='image');
+    $('audioBox').classList.toggle('hidden',m!=='audio');
+    $('randomPanel').classList.toggle('hidden',m!=='random');
+  }
+  $('modeText').onclick=()=>setMode('text');
+  $('modeImage').onclick=()=>setMode('image');
+  $('modeAudio').onclick=()=>setMode('audio');
+  $('modeRandom').onclick=function(){setMode('random');getFreshUnseenStory($('selStoryGenre').value,false)};
+
+  $('btnGoogleSearchStory').onclick=function(){
+    const genre=$('selStoryGenre').value==='ALL'?'溫馨療癒生活故事':$('selStoryGenre').value;
+    const gSec=parseInt($('selGoogleStorySec').value,10)||30;
+    setDuration(gSec);
+    if(!$('inpTitle').value.trim())getFreshUnseenStory($('selStoryGenre').value,true);
+    const kw=$('inpTitle').value.trim();
+    const todayStr=new Date().toLocaleDateString('zh-TW');
+    const q=`${genre} ${kw} ${gSec}秒 感人短故事 ${todayStr}`;
+    generateDirectStoryboard(false);
+    toast(`🌐 已先在下方生成 ${gSec} 秒（${gSec/10} 幕）分鏡，並開啟 Google 搜尋...`);
+    setTimeout(()=>window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank'),350);
+  };
+
+  $('inpAudio').onchange=function(e){
+    const f=e.target.files[0];if(!f)return;
+    const au=new Audio(URL.createObjectURL(f));
+    au.onloadedmetadata=function(){
+      const sec=Math.max(10,Math.min(300,Math.round(au.duration/10)*10));
+      setDuration(sec);
+      const cleanName=f.name.replace(/\.[^.]+$/,'');
+      $('inpTitle').value=cleanName;
+      $('audioInfo').textContent=`✅ 已讀取「${f.name}」（約 ${Math.round(au.duration)} 秒，已自動設為 ${sec} 秒 / ${sec/10} 幕），請按下方橘色按鍵生成各10秒分鏡！`;
+      toast(`🎵 音檔偵測完成：共 ${sec} 秒（${sec/10} 幕）`);
+    };
+  };
+
+  document.querySelectorAll('.hook-btn').forEach(b=>b.onclick=function(){
+    document.querySelectorAll('.hook-btn').forEach(x=>x.classList.remove('act'));
+    this.classList.add('act');S.hook=this.dataset.hook;
+  });
+
+  function updateDoneBadge(){
+    const doneCnt=S.scenes.filter(s=>s.done).length;
+    $('doneProgressBadge').textContent=`已完成 ${doneCnt} / ${S.scenes.length} 幕`;
+  }
+
+  function buildScenePrompts(idx, plotText, title){
+    const count=S.scenes.length||Math.max(1,Math.round((S.sec||30)/10));
+    const ratio=$('selRatio').value;
+    const style=$('selStyle').value;
+    const cam=$('selCam').value;
+    const activeCast=S.cast.filter(c=>c.sel);
+    const castDesc=activeCast.length?activeCast.map(c=>`${c.name} (${c.look})`).join('; '):`characters matching "${title}"`;
+    const translatedAction=translateZhPlotToEn(plotText);
+    const imgMood=S.uploadedImgInfo?`, ${S.uploadedImgInfo.enMood}`:'';
+
+    const imgPrompt=`[${ratio}] First-frame keyframe illustration, Scene ${idx+1} of ${count} for "${title}": ${translatedAction}. Characters: ${castDesc}. ${style}${imgMood}, high detail composition, no text, no watermark.`;
+    const vidPrompt=`[${ratio}] Image-to-video animation from uploaded first-frame image (Scene ${idx+1}/${count}): ${translatedAction}. Gentle natural character expressions and subtle body movement, ${cam}, maintaining exact character appearance and lighting from the first frame.`;
+    return {imgPrompt, vidPrompt};
+  }
+
+  window.onPlotEdited=function(idx, newPlot){
+    const sc=S.scenes[idx];
+    if(!sc)return;
+    sc.plot=newPlot;
+    const title=$('inpTitle').value.trim()||'珍妮花暖心短影音';
+    const {imgPrompt, vidPrompt}=buildScenePrompts(idx, newPlot, title);
+    sc.imgEn=imgPrompt;
+    sc.en=vidPrompt;
+    const imgBox=$('imgEnBox'+idx);
+    const vidBox=$('vidEnBox'+idx);
+    if(imgBox)imgBox.value=imgPrompt;
+    if(vidBox)vidBox.value=vidPrompt;
+  };
+
+  function generateDirectStoryboard(doScroll=true){
+    let title=$('inpTitle').value.trim();
+    let idea=$('inpIdea').value.trim();
+    const audioNote=$('inpAudioNote')?$('inpAudioNote').value.trim():'';
+
+    if(S.mode==='audio'){
+      if(!title)title='本機音檔配樂短片';
+      if(!idea)idea=audioNote?`搭配本機音檔「${title}」，主題為${audioNote}的溫暖視覺故事`:`搭配本機音檔「${title}」節奏，呈現溫暖動人的畫面故事`;
+    }else if(S.mode==='image'){
+      if(!title)title=$('inpImgKeyword').value.trim()||'照片裡的溫暖時光';
+      if(!idea)idea=`以這張「${title}」照片為第 1 幕首幀起點，展開一段溫暖感人的生活故事與陪伴時光。`;
+    }else{
+      if(!title&&!idea){
+        const st=getFreshUnseenStory('ALL',true);
+        title=st.title;idea=st.idea;
+      }else if(title&&!idea){
+        idea=`圍繞「${title}」展開的溫馨故事：開場用吸睛畫面帶出「${title}」的核心情感，中段呈現生動細節與互動溫度，結尾留下令人回味的暖心金句。`;
+      }else if(!title&&idea){
+        title=idea.slice(0,12).replace(/[，。！？\n]/g,'')||'珍妮花暖心故事';
+        $('inpTitle').value=title;
+      }
+    }
+
+    const totalSec=S.sec||30;
+    const count=Math.max(1,Math.round(totalSec/10));
+    const ratio=$('selRatio').value;
+    const style=$('selStyle').value;
+    const cam=$('selCam').value;
+    const cont=$('selContinuity').value==='on';
+    const imgMood=S.uploadedImgInfo?`, ${S.uploadedImgInfo.enMood}`:'';
+
+    const activeCast=S.cast.filter(c=>c.sel);
+    const castDesc=activeCast.length?activeCast.map(c=>`${c.name} (${c.look})`).join('; '):`characters matching the story "${title}"`;
+
+    const vCount=S.voiceCount;
+    const activeVoices=[];
+    for(let v=0;v<vCount;v++){
+      const sl=S.voiceSlots[v]||{name:'角色'+(v+1),typeIdx:v%VOICE_TYPES.length,toneIdx:v%VOICE_TONES.length};
+      const vt=VOICE_TYPES[sl.typeIdx]||VOICE_TYPES[0];
+      const tn=VOICE_TONES[sl.toneIdx]||VOICE_TONES[0];
+      const spkName=sl.name||('角色'+(v+1));
+      activeVoices.push({
+        name:spkName,
+        en:`Speaker ${v+1} (${spkName}): ${vt.en}, ${tn.en}`,
+        label:`${vt.label} · ${tn.label}`
+      });
+    }
+
+    const matched=STORIES.find(s=>s.title===title);
+    const scenes=[];
+    const segs=idea.split(/[，。！？\n]/).filter(Boolean);
+
+    const autoBeats=[
+      `【前3秒 ${S.hook}】「${title}」吸睛特寫開場，瞬間抓住觀眾目光`,
+      `「${title}」互動細節展開，展現溫暖表情與生動動作`,
+      `情感升溫時刻，「${title}」在柔和光影中彼此陪伴`,
+      `轉折與驚喜發現，讓「${title}」的故事更加立體動人`,
+      `溫馨高潮畫面，陽光灑落「${title}」最感人的瞬間`,
+      `暖心金句收尾，為「${title}」畫下充滿希望的句點`
+    ];
+
+    for(let i=0;i<count;i++){
+      const timeStr=`${fmtTime(i*10)} --> ${fmtTime((i+1)*10)}`;
+      const voiceObj=activeVoices.length?activeVoices[i%activeVoices.length]:null;
+
+      if(matched&&matched.shots[i]){
+        const sh=matched.shots[i];
+        const customLine=voiceObj?`${voiceObj.name} [${voiceObj.en}]: ${sh.text}`:'（本幕設定為 0 人配音，僅保留環境音效與畫面）';
+        scenes.push({
+          idx:i+1,time:timeStr,plot:sh.plot,done:false,
+          imgEn:`[${ratio}] ${sh.imgEn}. Consistent characters: ${castDesc}. ${style}${imgMood}, no text.`,
+          en:`[${ratio}] ${sh.vidEn}. ${cam}, keeping exact appearance and lighting from the uploaded first-frame image.`,
+          end:cont?sh.end:'獨立單幕畫面',
+          sfx:sh.sfx||'自然環境音與溫暖鋼琴背景配樂',
+          tone:voiceObj?`聲線區分：${voiceObj.label}`:(sh.tone||'純畫面敘事'),
+          line:customLine
+        });
+      }else{
+        const beatText=segs[i%segs.length]||autoBeats[i%autoBeats.length];
+        const phase=i===0?`【前3秒 ${S.hook}】`:(i===count-1?'【溫馨金句收尾】':`【第 ${i+1} 幕發展】`);
+        const fullPlot=`${phase}${beatText}`;
+        const translatedAction=translateZhPlotToEn(fullPlot);
+        const lineText=voiceObj?`${voiceObj.name} [${voiceObj.en}]: ${beatText}`:'（本幕設定為 0 人配音，僅保留環境音效與畫面）';
+        const firstNote=(i===0&&S.mode==='image')?'(Use uploaded photo directly as first frame, or generate variation): ':'';
+        scenes.push({
+          idx:i+1,time:timeStr,plot:fullPlot,done:false,
+          imgEn:`[${ratio}] ${firstNote}First-frame keyframe illustration, Scene ${i+1} of ${count} for "${title}": ${translatedAction}. Characters: ${castDesc}. ${style}${imgMood}, high detail composition, no text.`,
+          en:`[${ratio}] Image-to-video animation from uploaded first-frame image (Scene ${i+1}/${count}): ${translatedAction}. Gentle natural character expressions and movement, ${cam}, maintaining exact character appearance from the first frame.`,
+          end:cont?(i<count-1?`鏡頭平滑延續角色姿勢與暖光色調，無縫銜接第 ${i+2} 幕首幀`:'角色微笑定格，暖光漸亮收尾'):'獨立單幕畫面',
+          sfx:i===0?'吸睛轉場音效、輕柔自然環境音':(i===count-1?'溫暖鋼琴與弦樂收尾':'柔和環境背景音'),
+          tone:voiceObj?`聲線區分：${voiceObj.label}`:'純畫面敘事、無旁白',
+          line:lineText
+        });
+      }
+    }
+    S.scenes=scenes;
+    $('resultTitleHeading').textContent=`《${title}》全套 ${count} 幕（${totalSec} 秒）分鏡提示詞`;
+    renderScenes(title);
+    const resSec=$('resultSection');
+    resSec.classList.remove('hidden');
+    if(doScroll){
+      toast(`🎉 已生成全套 ${count} 幕（含首幀圖＋圖生影雙提示詞）！`);
+      setTimeout(()=>resSec.scrollIntoView({behavior:'smooth',block:'start'}),120);
+    }
+  }
+
+  $('btnDirectMaster').onclick=()=>generateDirectStoryboard(true);
+
+  function renderScenes(title){
+    const isTwoStep=S.workflow==='img2vid';
+    $('twoStageBanner').classList.toggle('hidden',!isTwoStep);
+
+    $('scenesList').innerHTML=S.scenes.map((sc,idx)=>`
+      <div class="scene ${sc.done?'done':''}" id="sceneCard${idx}">
+        <div class="scene-top">
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span class="pill">第 ${sc.idx} 幕 · ${sc.time.replace(/,000/g,'')}</span>
+            <button type="button" class="done-btn" onclick="toggleSceneDone(${idx})">${sc.done?'✅ 影片完成':'⬜ 標記完成'}</button>
+          </div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button type="button" class="pack-btn" onclick="copyFullScenePack(${idx})">📋 複製全套</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:8px">
+          <label class="lbl" style="font-size:11px;color:var(--ink)">📖 中文劇情大意（✏️ 修改此處，下方英文提示詞會自動即時連動更新！）：</label>
+          <textarea rows="3" class="edit-area" style="font-weight:700;border-color:#C4B5FD" oninput="onPlotEdited(${idx},this.value)">${sc.plot}</textarea>
+        </div>
+
+        <div class="step1-img-box ${isTwoStep?'':'hidden'}">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap">
+            <span style="font-size:11px;font-weight:900;color:#1D4ED8">🖼️ 步驟①：首幀圖片生成 Prompt（先在 Flow 選 Image 生出此幕首幀底圖）</span>
+            <button type="button" class="img-btn" onclick="copyImgAndFlow(${idx})">🖼️ 複製首幀圖 Prompt 並開 Flow ↗</button>
+          </div>
+          <textarea id="imgEnBox${idx}" rows="3" class="edit-area" style="border-color:#93C5FD;margin-bottom:0" oninput="S.scenes[${idx}].imgEn=this.value">${sc.imgEn}</textarea>
+        </div>
+
+        <div class="step2-vid-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:5px;flex-wrap:wrap">
+            <span style="font-size:11px;font-weight:900;color:var(--pri)">${isTwoStep?'🎥 步驟②：圖生影片動作 Prompt（在 Flow 上傳首幀圖後貼上此段讓畫面動起來）':'🎬 英文畫面提示詞 Prompt（直接貼上生成影片）'}</span>
+            <button type="button" class="flow-btn" onclick="copyAndFlow(${idx})">${isTwoStep?'🎥 複製圖生影 Prompt 並開 Flow ↗':'🚀 複製並開 Flow ↗'}</button>
+          </div>
+          <textarea id="vidEnBox${idx}" rows="3" class="edit-area" style="border-color:#C4B5FD;margin-bottom:0" oninput="S.scenes[${idx}].en=this.value">${sc.en}</textarea>
+        </div>
+
+        <div class="link-box">
+          <label class="lbl" style="font-size:11px;color:#92400E">🔗 首尾幀連貫銜接提示（多行可上下滑動・可手動修改）：</label>
+          <textarea rows="2" class="edit-area" style="border-color:#FCD34D" oninput="S.scenes[${idx}].end=this.value">${sc.end}</textarea>
+        </div>
+
+        <div class="sfx-box">
+          <label class="lbl" style="font-size:11px;color:#065F46">🔊 環境音效（SFX）（多行可上下滑動・可手動修改）：</label>
+          <textarea rows="2" class="edit-area" style="border-color:#A7F3D0;margin-bottom:6px" placeholder="環境音效" oninput="S.scenes[${idx}].sfx=this.value">${sc.sfx}</textarea>
+          <label class="lbl" style="font-size:11px;color:#065F46">🎙️ 聲線與語氣區分備註（多行可上下滑動・可手動修改）：</label>
+          <textarea rows="2" class="edit-area" style="border-color:#A7F3D0" placeholder="聲線與語氣備註" oninput="S.scenes[${idx}].tone=this.value">${sc.tone}</textarea>
+        </div>
+
+        <label class="lbl" style="font-size:11px;color:var(--ok)">🗣️ 角色台詞與獨立聲線指紋（多行可上下滑動・同步匯出至 .SRT 字幕）：</label>
+        <textarea rows="3" class="edit-area" style="margin-bottom:0" oninput="S.scenes[${idx}].line=this.value">${sc.line}</textarea>
+      </div>
+    `).join('');
+    updateDoneBadge();
+
+    const t=title||$('inpTitle').value.trim()||'珍妮花暖心故事';
+    $('socialBox').value=`✨【${t}】（${S.sec}秒完整版）\n${S.scenes.map(s=>s.line.replace(/\[.*?\]\s*:\s*/,'：')).join('\n')}\n\n💬 你也有類似的溫暖回憶嗎？留言跟我分享吧！\n#珍妮花說故事 #AI動畫 #短影音創作 #暖心正能量 #台灣故事`;
+  }
+
+  window.toggleSceneDone=function(idx){
+    const sc=S.scenes[idx];if(!sc)return;
+    sc.done=!sc.done;
+    const card=$('sceneCard'+idx);
+    if(card){
+      card.classList.toggle('done',sc.done);
+      const btn=card.querySelector('.done-btn');
+      if(btn)btn.textContent=sc.done?'✅ 影片完成':'⬜ 標記完成';
+    }
+    updateDoneBadge();
+    toast(sc.done?`✅ 第 ${sc.idx} 幕已標記完成！`:`⬜ 已取消第 ${sc.idx} 幕完成標記`);
+  };
+
+  window.copyFullScenePack=function(idx){
+    const sc=S.scenes[idx];if(!sc)return;
+    const pack=`【第 ${sc.idx} 幕 (${sc.time.replace(/,000/g,'')})】\n劇情：${sc.plot}\n① 首幀圖片 Prompt：${sc.imgEn}\n② 圖生影片 Prompt：${sc.en}\n首尾幀銜接：${sc.end}\n環境音效與聲線：${sc.sfx}（${sc.tone}）\n配音台詞：${sc.line}`;
+    copyText(pack,`📋 已複製第 ${sc.idx} 幕完整套件！`);
+  };
+
+  window.copyImgAndFlow=function(idx){
+    const sc=S.scenes[idx];if(!sc)return;
+    copyText(sc.imgEn,'🖼️ 已複製第 '+sc.idx+' 幕「首幀圖片」Prompt，正在開啟 Google Flow...');
+    setTimeout(()=>window.open('https://labs.google/fx/tools/flow','_blank'),350);
+  };
+
+  window.copyAndFlow=function(idx){
+    const sc=S.scenes[idx];if(!sc)return;
+    copyText(sc.en,'🎥 已複製第 '+sc.idx+' 幕「圖生影片」Prompt，正在開啟 Google Flow...');
+    setTimeout(()=>window.open('https://labs.google/fx/tools/flow','_blank'),350);
+  };
+
+  $('btnCopyAllImgPrompts').onclick=function(){
+    if(!S.scenes.length)return toast('請先生成分鏡');
+    const txt=S.scenes.map(s=>`[Scene ${s.idx} First-Frame Image]\n${s.imgEn}`).join('\n\n');
+    copyText(txt,`🖼️ 已一次複製全部 ${S.scenes.length} 幕首幀圖片 Prompt！`);
+  };
+  $('btnCopyAllVidPrompts').onclick=function(){
+    if(!S.scenes.length)return toast('請先生成分鏡');
+    const txt=S.scenes.map(s=>`[Scene ${s.idx} Image-to-Video]\n${s.en}`).join('\n\n');
+    copyText(txt,`🎥 已一次複製全部 ${S.scenes.length} 幕圖生影片 Prompt！`);
+  };
+
+  $('btnCopyStep1').onclick=function(){
+    const t=$('inpTitle').value.trim()||'自訂主題';
+    const idea=$('inpIdea').value.trim()||'請發想溫馨感人故事';
+    const cast=S.cast.filter(c=>c.sel).map(c=>`${c.name}（外觀：${c.look}）`).join('、');
+    const prompt=`請擔任短影音編劇，為主題「${t}」（大綱：${idea}）發想 3 個不同風格的 ${S.sec} 秒（共 ${S.sec/10} 幕）短影音故事版本。\n開場 Hook 風格：${S.hook}\n登場角色：${cast}\n請用「版本一」「版本二」「版本三」清楚分段輸出繁體中文故事。`;
+    copyText(prompt,'📋 已複製 3 版故事指令！正在開啟 Gemini...');
+    setTimeout(()=>window.open('https://gemini.google.com/app','_blank'),400);
+  };
+
+  function downloadFile(name,content){
+    const blob=new Blob(['\uFEFF'+content],{type:'text/plain;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+  }
+  $('btnExportSrt').onclick=function(){
+    if(!S.scenes.length)return toast('請先生成分鏡再下載字幕');
+    const srt=S.scenes.map(s=>`${s.idx}\n${s.time}\n${s.line.replace(/\[.*?\]\s*:\s*/,'：')}\n`).join('\n');
+    downloadFile(($('inpTitle').value.trim()||'珍妮花工作室')+'.srt',srt);
+    toast('🎬 已下載最新修改的剪映 .srt 字幕檔！');
+  };
+  $('btnExportTxt').onclick=function(){
+    if(!S.scenes.length)return toast('請先生成分鏡再下載腳本');
+    const t=$('inpTitle').value.trim()||'珍妮花工作室腳本';
+    const txt=`【${t}】完整分鏡腳本（共 ${S.sec} 秒 · 首幀生圖＋圖生影雙提示詞）\n\n`+S.scenes.map(s=>`=== 第 ${s.idx} 幕 (${s.time}) ===\n劇情：${s.plot}\n首幀圖片 Prompt：${s.imgEn}\n圖生影片 Prompt：${s.en}\n首尾幀：${s.end}\n音效與聲線：${s.sfx}｜${s.tone}\n台詞：${s.line}\n`).join('\n')+`\n=== 社群發佈文案 ===\n${$('socialBox').value}`;
+    downloadFile(t+'.txt',txt);
+    toast('📥 已下載最新修改的完整腳本 .txt！');
+  };
+  $('btnCopySocial').onclick=()=>copyText($('socialBox').value,'📱 已複製社群文案與 Hashtag！');
+
+  function updateHistBadge(){$('histCount').textContent=S.hist.length}
+  $('btnSaveHist').onclick=function(){
+    if(!S.scenes.length)return toast('請先生成分鏡再儲存');
+    const t=$('inpTitle').value.trim()||'未命名專案';
+    S.hist.unshift({id:Date.now(),title:t,sec:S.sec,date:new Date().toLocaleString('zh-TW'),scenes:S.scenes,social:$('socialBox').value});
+    localStorage.setItem('jf_hist',JSON.stringify(S.hist.slice(0,20)));
+    updateHistBadge();toast('💾 已儲存至本機歷史專案！');
+  };
+  $('btnOpenHist').onclick=function(){
+    $('toolDrawer').classList.add('hidden');
+    $('histList').innerHTML=S.hist.length?S.hist.map((h,i)=>`
+      <div style="border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+        <div><strong style="font-size:13px">${h.title}</strong><div style="font-size:11px;color:var(--mut)">${h.date} · ${h.sec||30}秒</div></div>
+        <button type="button" class="btn-sub" onclick="loadHist(${i})">載入</button>
+      </div>
+    `).join(''):'<div style="font-size:12px;color:var(--mut);text-align:center;padding:16px">尚無儲存的本機專案</div>';
+    $('histModal').classList.remove('hidden');
+  };
+  window.loadHist=function(i){
+    const h=S.hist[i];if(!h)return;
+    $('inpTitle').value=h.title;if(h.sec)setDuration(h.sec);S.scenes=h.scenes;
+    $('resultTitleHeading').textContent=`《${h.title}》全套 ${h.scenes.length} 幕（${h.sec||30} 秒）分鏡提示詞`;
+    renderScenes(h.title);$('socialBox').value=h.social||'';
+    $('histModal').classList.add('hidden');
+    $('resultSection').classList.remove('hidden');
+    $('resultSection').scrollIntoView({behavior:'smooth'});
+    toast('📂 已載入歷史專案');
+  };
+
+  $('btnPwaInfo').onclick=function(){$('toolDrawer').classList.add('hidden');$('pwaModal').classList.remove('hidden')};
+  $('btnDemo').onclick=function(){
+    $('toolDrawer').classList.add('hidden');
+    getFreshUnseenStory('ALL',true);
+    generateDirectStoryboard(true);
+  };
+  $('btnResetInModal').onclick=function(){
+    $('pwaModal').classList.add('hidden');
+    getFreshUnseenStory('ALL',true);
+    S.scenes=[];
+    $('resultSection').classList.add('hidden');
+    toast('🔄 已換上全新故事並清空下方分鏡');
+  };
+
+  renderPortals();renderCast();syncSelectedCastToVoices();updateHistBadge();
+  getFreshUnseenStory('ALL',true);
+})();
+</script>
+</body>
+</html>
